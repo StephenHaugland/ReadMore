@@ -1,0 +1,26 @@
+<% layout('layouts/boilerplate')%>
+<div>
+    <div class="container mb-3"><h1>My Library</h1></div>
+    
+    <!-- <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <h2>To Read</h2>
+            </div>
+            <div class="col-sm">
+                <h2>Currently Reading</h2>
+            </div>
+            <div class="col-sm">
+                <h2>Read</h2>
+            </div>
+
+        </div>
+
+    </div> -->
+    <h3>Books</h3>
+    <ul>
+        <% for (let book of books) { %>
+            <li> <%= book.title %> by <%= book.author %> <a href="library/<%=book._id %>"> View</a></li>
+            <% } %>
+    </ul>
+</div>

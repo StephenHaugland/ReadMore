@@ -1,0 +1,51 @@
+<% layout('layouts/boilerplate')%>
+<div>
+    <h1>Edit Book</h1>
+    <form action="/library/<%= book._id %>?_method=PUT" method="POST" novalidate class="validated-form">
+        <div class="mb-3">
+            <label class="form-label" for="title">Title</label>
+            <input class="form-control" type="text" id="title" name="book[title]" required value="<%=book.title%>">
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="Author">Author</label>
+            <input class="form-control" type="text" id="author" name="book[author]" required value="<%= book.author %>">
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="Genre">Genre</label>
+            <input class="form-control" type="text" id="genre" name="book[genre]" required value="<%= book.genre %>">
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <div>
+                <input class="form-check-input" type="radio" id="toRead" name="book[list]"required value="toRead"></input>
+                <label class="form-check-label" for="toRead">To Read</label>
+            </div>
+            <div>
+                <input class="form-check-input" type="radio" id="currentlyReading" name="book[list]"required value="currentlyReading"></input>
+                <label class="form-check-label" for="currentlyReading">Currently Reading</label>
+            </div>
+            <div>
+                <input class="form-check-input" type="radio" id="read" name="book[list]"required value="read"></input>
+                <label class="form-check-label" for="read">Read</label>
+            </div>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <button class="btn btn-success">Edit Book</button>
+        </div>
+    </form>
+    <a href="/library">All Books</a>
+</div>

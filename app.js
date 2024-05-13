@@ -94,6 +94,12 @@ app.get('/', (req,res) => {
     res.render('home')
 })
 
+app.get('/search', (req,res)=>{
+    res.render('search');
+})
+
+// app.post()
+
 app.get('/library', async (req,res)=>{
     const books = await Book.find({});
     res.render('library/index', {books});
@@ -138,7 +144,6 @@ app.delete('/library/:id', async (req,res)=>{
 //     res.send(book);
 // })
 
-app.get('/')
 
 app.all('*', (req,res,next)=>{
     next(new ExpressError('Page Not Found', 404))

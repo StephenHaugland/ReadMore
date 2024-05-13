@@ -9,6 +9,7 @@ const Joi = require('joi');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
+const mysql2 = require('mysql2');
 
 const mongoSanitize = require('express-mongo-sanitize');
 

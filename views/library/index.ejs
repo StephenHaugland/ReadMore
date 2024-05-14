@@ -19,8 +19,8 @@
     </div> -->
     <h3>Books</h3>
     <ul>
-        <% for (let book of books) { %>
-            <li> <%= book.title %> by <%= book.author %> <a href="library/<%=book._id %>"> View</a></li>
-            <% } %>
+       <% for (let b of books){ %>
+        <li> <a href="library/<%=b.isbn%>"><%= b.title %></a> by <%= b.author %></li>
+        <% } %>
     </ul>
 </div>

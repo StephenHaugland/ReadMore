@@ -1,13 +1,8 @@
-import { createPool } from 'mysql2';
-import dotenv from 'dotenv';
+const { createPool } = require('mysql2');
+const dotenv = require('dotenv');
 dotenv.config();
 
-// const pool  = createPool({
-//     host: '127.0.0.1',
-//     user: 'root',
-//     password: '',
-//     database: 'read_more'
-// }).promise();
+
 
 const pool  = createPool({
     host: process.env.MYSQL_HOST,
@@ -16,16 +11,13 @@ const pool  = createPool({
     database: process.env.MYSQL_DATABASE
 }).promise();
 
-// console.log(pool);
 
-export async function getBooks(){
+module.exports.getBooks = async()=>{
     const [rows] = await pool.query("SELECT * FROM books");
     return rows;
 }
 
-export async function getBook(id) {
-    
-
+module.exports.getBook = async(id)=> {
     const [rows] = await pool.query(`
     SELECT *
     FROM books
@@ -34,17 +26,36 @@ export async function getBook(id) {
     return rows[0];
 }  
 
-export async function createBook(title,author){
+module.exports.updateBook = async(book, id)=> {
+    const {title,author,genre,shelf} = book;
     const [result] = await pool.query(`
-    INSERT INTO books (title, author)
-    VALUES (?, ?)
-    `, [title, author])
-    const id = result.insertId
-    return getBook(id);
+    UPDATE books
+    SET 
+    title = ?,
+    author=?,
+    genre=?,
+    shelf=?
+    WHERE isbn = ?    
+    `, [title,author,genre,shelf, id]);
+    return this.getBook(id);
 }
 
-// const result = await createBook('book5', 'Deep Writer');
-// console.log(result);
+module.exports.createBook = async(book)=>{
 
-// const books = await getBook(1);
-// console.log(books);
+    const [result] = await pool.query(`
+    INSERT INTO books (title, author, genre, shelf)
+    VALUES (?, ?, ?, ?)
+    `, [book.title, book.author, book.genre, book.shelf])
+    // console.log(result)
+    const id = result.insertId
+    return this.getBook(id);
+}
+
+module.exports.deleteBook = async(id)=>{
+    const [result] = await pool.query(`
+    DELETE
+    FROM
+    books
+    WHERE isbn=?
+    `, [id])
+}

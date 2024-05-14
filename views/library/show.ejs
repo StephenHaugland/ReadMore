@@ -5,13 +5,13 @@
     <h1><%= book.title %></h1>
     <h3><%= book.author %></h3>
     <h3><%= book.genre %></h3>
-    <h3>Currently in: <%= book.list %></h3>
+    <h3>Currently in: </h3>
 
-    <a href="/library/<%=book._id%>/edit">Edit</a>
+    <a href="/library/<%=book.isbn%>/edit">Edit</a>
 
 
     <a href="/library">Back to Library</a>
-    <form action="/library/<%= book._id %>?_method=DELETE" method="POST">
+    <form action="/library/<%= book.isbn%>?_method=DELETE" method="POST">
         <button>
             Delete
         </button>

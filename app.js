@@ -17,7 +17,7 @@ const methodOverride = require('method-override');
 const {getBooks, createBook} = require('./database.js');
 const {searchByTerm} = require('./bookapi.js')
 const {storeReturnTo} = require('./middleware');
-const {createNewBook, addBookToShelf, getUserLibrary, getBook, updateBook, deleteBook} = require('./controllers/books.js')
+const {createNewBook, addBookToShelf, getUserLibrary, getBook, updateBook, deleteBook, getAllBooks} = require('./controllers/books.js')
 
 const mongoSanitize = require('express-mongo-sanitize');
 
@@ -102,7 +102,7 @@ app.use((req,res,next) =>{
 
 
 app.get('/', (req,res) => {
-    res.render('home')
+    res.render('users/login')
 })
 
 app.get('/search', (req,res)=>{
@@ -160,11 +160,13 @@ app.get('/logout', async (req,res)=>{
 
 
 // retrieve and show all books in the db
-app.get('/library', async (req,res)=>{
+app.get('/books', async (req,res)=>{
     // NEW MONGO INDEX
-    const userID = res.locals.currentUser._id;
+    // const userID = res.locals.currentUser._id;
+    const books = await getAllBooks();
 
-    const shelves = await getUserLibrary(userID);
+
+    // const shelves = await getUserLibrary(userID);
     // console.log(shelves);
     // const {read} = shelves;
     // console.log(read)
@@ -173,59 +175,52 @@ app.get('/library', async (req,res)=>{
     // query sql server for books
     // const books = await getBooks();
     // console.log(books);
-    res.render('library/index', {shelves});
+    res.render('books/index', {books});
 })
 
-app.get('/library/new', (req,res) => {
-    res.render('library/new')
+app.get('/books/new', (req,res) => {
+    res.render('books/new')
 })
 
 // retreive and show 1 book from db
-app.get('/library/:id', async(req,res)=>{
+app.get('/books/:id', async(req,res)=>{
     const book = await getBook(req.params.id);
-    //LEGACY SQL, DELETE LATER
-    // const book = await getBook(req.params.id);
-    res.render('library/show', {book})
+    res.render('books/show', {book})
 })
 
 // add 1 new book
-app.post('/library', async(req,res)=>{
+app.post('/books', async(req,res)=>{
     //NEW MONGO
     // addBookToShelf(book,r)
-    const {book, shelf} = req.body;
-    const userID = res.locals.currentUser._id;
+    const {book} = req.body;
+    // const userID = res.locals.currentUser._id;
     const newBook = await createNewBook(book);
-    await addBookToShelf(newBook, userID, shelf);
+    // await addBookToShelf(newBook, userID, shelf);
     
-
-    // SQL LEGACY: DELETE LATER
-    // const newb= await createBook(book);
-
-    res.redirect(`/library/${newBook._id}`);
+    res.redirect(`/books/${newBook._id}`);
 })
 
 // route to show book edit page
-app.get('/library/:id/edit', async(req,res)=>{
+app.get('/books/:id/edit', async(req,res)=>{
     const book = await getBook(req.params.id);
-    res.render('library/edit', {book})
+    res.render('books/edit', {book})
 })
 
 // post route to update book
-app.put('/library/:id', async(req,res)=>{
+app.put('/books/:id', async(req,res)=>{
     const {id} = req.params;
-    const {book, shelf} = req.body;
-    const userID = res.locals.currentUser._id;
-    const updatedBook = await updateBook(book,id,userID, shelf)
-    res.redirect(`/library/${id}`);
+    const {book} = req.body;
+    const updatedBook = await updateBook(book,id)
+    res.redirect(`/books/${id}`);
 })
 
 // delete route to remove 1 book by id
-app.delete('/library/:id', async (req,res)=>{
+app.delete('/books/:id', async (req,res)=>{
     const {id} = req.params;
     await deleteBook(id);
-    req.flash('success', 'Successfully deleted campground');
+    req.flash('success', 'Successfully deleted book');
 
-    res.redirect('/library');
+    res.redirect('/books');
 })
 
 // app.get('/makebook', async(req,res) => {

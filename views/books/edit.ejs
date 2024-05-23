@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate')%>
 <div>
     <h1>Edit Book</h1>
-    <form action="/library/<%= book._id %>?_method=PUT" method="POST" novalidate class="validated-form">
+    <form action="/books/<%= book._id %>?_method=PUT" method="POST" novalidate class="validated-form">
         <div class="mb-3">
             <label class="form-label" for="title">Title</label>
             <input class="form-control" type="text" id="title" name="book[title]" required value="<%=book.title%>">
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <div>
                 <input class="form-check-input" type="radio" id="read" name="shelf"required value="read"></input>
                 <label class="form-check-label" for="read">Read</label>
@@ -39,11 +39,11 @@
                 <label class="form-check-label" for="WanttoRead">Want To Read</label>
             </div>
             
-        </div>
+        </div> -->
         
         <div class="mb-3">
             <button class="btn btn-success">Save Edit</button>
         </div>
     </form>
-    <a href="/library">All Books</a>
+    <a href="/books">All Books</a>
 </div>

@@ -10,11 +10,12 @@ const UserSchema = new Schema({
         required: true,
         unique: true
     },
-    shelves: {
-        reading: [{type: Schema.Types.ObjectId, ref:'Book'}],
-        wantToRead: [{type: Schema.Types.ObjectId, ref:'Book'}],
-        read: [{type: Schema.Types.ObjectId, ref:'Book'}]
-    }
+    entries: [{type: Schema.Types.ObjectId, ref:'Entry'}]
+    // shelves: {
+    //     reading: [{type: Schema.Types.ObjectId, ref:'Book'}],
+    //     wantToRead: [{type: Schema.Types.ObjectId, ref:'Book'}],
+    //     read: [{type: Schema.Types.ObjectId, ref:'Book'}]
+    // }
 });
 UserSchema.plugin(passportLocalMongoose);
 module.exports = mongoose.model('User', UserSchema);

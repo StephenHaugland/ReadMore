@@ -1,19 +1,14 @@
 const Book = require('../models/book');
 const User = require('../models/user');
+const Entry = require('../models/entry');
 
-module.exports.getAllBooks = async () => {
-    return await Book.find({});
-}
-
-module.exports.getUserLibrary = async (uID) =>{
-    // const result = await User.findOne({_id:uID})
-    // .populate({path: 'shelves.read',select: 'isbn title author genre fiction'})
-    // .populate({path: 'shelves.reading',select: 'isbn title author genre fiction'})
-    // .populate({path: 'shelves.wantToRead',select: 'isbn title author genre fiction'})
-    // .select('shelves');
-    // console.log(result.shelves);
-    
-    // return result.shelves;
+module.exports.getUserEntries = async (uID) =>{
+    const user = await User.findOne({_id:uID})
+    .populate({path: 'entries',select: 'book shelf notes'})
+    .populate({path: 'entries.book', select: 'title author'})
+    .select('entries');
+    console.log(user.entries);
+    return user.entries;
 }
 
 module.exports.addBookToShelf = async (book,uID, shelf) =>{
@@ -36,7 +31,7 @@ module.exports.getBook = async (bID) =>{
     return book;
 }
 
-module.exports.updateBook = async (book,bID) => {
+module.exports.updateBook = async (book,bID,uID, shelf) => {
     //update book info
     const updatedBook = await Book.findOneAndUpdate({_id:bID},
         {...book},

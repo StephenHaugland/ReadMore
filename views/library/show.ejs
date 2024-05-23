@@ -2,16 +2,30 @@
 
 
 <div>
-    <h1><%= book.title %></h1>
-    <h3><%= book.author %></h3>
-    <h3><%= book.genre %></h3>
-    <h3>Currently in: </h3>
+    
 
-    <a href="/library/<%=book.isbn%>/edit">Edit</a>
+    <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F49%2F60%2F7c%2F49607c19eaf6e456ac6f06ad4688f337.jpg&f=1&nofb=1&ipt=5ddfaf4c68b548d1a7318160d91f06090210fee889e97209ff5054125d0615c4&ipo=images""
+             class="img-fluid rounded-start" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title"><%= book.title %></h5>
+              <p class="card-text"><%= book.author %></p>
+              <p class="card-text"><small class="text-muted"><%= book.fic %> - <%= book.genre %></small></p>
+              <span class="badge rounded-pill bg-primary"></span>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <a href="/library/<%=book._id%>/edit">Edit</a>
 
 
     <a href="/library">Back to Library</a>
-    <form action="/library/<%= book.isbn%>?_method=DELETE" method="POST">
+    <form action="/library/<%= book._id%>?_method=DELETE" method="POST">
         <button>
             Delete
         </button>

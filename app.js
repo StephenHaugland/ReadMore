@@ -14,10 +14,13 @@ const Joi = require('joi');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
-const {getBooks, createBook} = require('./database.js');
 const {searchByTerm} = require('./bookapi.js')
 const {storeReturnTo} = require('./middleware');
+// const {getBooks, createBook} = require('./database.js');
 const {createNewBook, addBookToShelf, getUserLibrary, getBook, updateBook, deleteBook, getAllBooks} = require('./controllers/books.js')
+const {createNewEntry, getEntry, updateEntry, deleteEntry} = require('./controllers/entries');
+const {addEntry, getAllEntries, removeEntry} = require('./controllers/users');
+
 
 const mongoSanitize = require('express-mongo-sanitize');
 
@@ -159,6 +162,10 @@ app.get('/logout', async (req,res)=>{
 })
 
 
+////////////////////////////////////////////////////////////////////////
+// Book Routes
+////////////////////////////////////////////////////////////////////////
+
 // retrieve and show all books in the db
 app.get('/books', async (req,res)=>{
     // NEW MONGO INDEX
@@ -223,11 +230,76 @@ app.delete('/books/:id', async (req,res)=>{
     res.redirect('/books');
 })
 
-// app.get('/makebook', async(req,res) => {
-//     const book = new Book({title:'12 Rules For Life', author: 'Jordan Peterson', genre: 'non-fiction', list: 'read'});
-//     await book.save();
-//     res.send(book);
-// })
+//////////////////////////////////////////////////////////////////
+// entry routes
+//////////////////////////////////////////////////////////////////
+
+
+// index page for all entries
+app.get('/entries', async (req,res)=>{
+    const userID = res.locals.currentUser._id;
+    const entries = await getAllEntries(userID);
+    res.render('entries/index', {entries});
+})
+
+// render new entry form page
+app.get('/entries/new', (req,res) => {
+    res.render('entries/new')
+})
+
+
+// add 1 new entry to user
+app.post('/entries', async(req,res)=>{
+    // create new entry using data supplied from form
+    const {entry} = req.body;
+    console.log(`entry from form: ${{entry}}`);
+    const newEntry = await createNewEntry(entry);
+    console.log(`entry created from db: ${newEntry}`)
+
+    // add newly created entry to user profile
+    const userID = res.locals.currentUser._id;
+    await addEntry(newEntry, userID);
+
+    res.redirect(`/entries/${newEntry._id}`);
+})
+
+// route to show entry edit page
+app.get('/entries/:id/edit', async(req,res)=>{
+    const entry = await getEntry(req.params.id);
+    res.render('entries/edit', {entry})
+})
+
+// post route to update book
+app.put('/entries/:id', async(req,res)=>{
+    const {id} = req.params;
+    const {entry} = req.body;
+    await updateEntry(entry,id);
+    res.redirect(`/entries/${id}`);
+})
+
+// retreive and show 1 entry
+app.get('/entries/:id', async(req,res)=>{
+    const entry = await getEntry(req.params.id);
+    const {book, shelf, notes} = entry;
+    res.render('entries/show', {book, shelf, notes, entry})
+})
+
+// delete route to remove 1 entry by id
+app.delete('/entries/:id', async (req,res)=>{
+    const {id} = req.params;
+    const userID = res.locals.currentUser._id;
+
+    await removeEntry(id, userID);
+
+    await deleteEntry(id);
+    req.flash('success', 'Successfully deleted book');
+
+    res.redirect('/entries');
+})
+
+
+
+/////////////////////////////////////////////////////////////////////
 
 
 app.all('*', (req,res,next)=>{

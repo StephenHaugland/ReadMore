@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const User = require('./user')
 
 
 
@@ -10,10 +11,16 @@ const EntrySchema = new Schema({
     },
     shelf: {
         type: String,
-        enum: ['read','wantToRead','Reading'],
+        enum: ['read','wantToRead','reading'],
         required:true
     },
     notes: String    
 });
+
+// EntrySchema.pre('findOneAndDelete', async function(doc) {
+//     if(doc) {
+//         await User.
+//     }
+// })
 
 module.exports = mongoose.model('Entry', EntrySchema);

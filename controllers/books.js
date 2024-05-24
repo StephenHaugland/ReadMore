@@ -5,7 +5,7 @@ module.exports.getAllBooks = async () => {
     return await Book.find({});
 }
 
-module.exports.getUserLibrary = async (uID) =>{
+// module.exports.getUserLibrary = async (uID) =>{
     // const result = await User.findOne({_id:uID})
     // .populate({path: 'shelves.read',select: 'isbn title author genre fiction'})
     // .populate({path: 'shelves.reading',select: 'isbn title author genre fiction'})
@@ -14,16 +14,16 @@ module.exports.getUserLibrary = async (uID) =>{
     // console.log(result.shelves);
     
     // return result.shelves;
-}
+// }
 
-module.exports.addBookToShelf = async (book,uID, shelf) =>{
-    const targetShelf = "shelves." + shelf;
-    const user = await User.findOneAndUpdate({_id:uID},{
-        $push: {[targetShelf]: [book._id]}
-    });
-    await user.save();
-    // console.log(user);
-}
+// module.exports.addBookToShelf = async (book,uID, shelf) =>{
+//     const targetShelf = "shelves." + shelf;
+//     const user = await User.findOneAndUpdate({_id:uID},{
+//         $push: {[targetShelf]: [book._id]}
+//     });
+//     await user.save();
+//     // console.log(user);
+// }
 
 module.exports.createNewBook = async (book) =>  {
     const newBook = new Book(book);

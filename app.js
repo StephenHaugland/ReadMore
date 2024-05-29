@@ -14,7 +14,7 @@ const Joi = require('joi');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
-const {searchByTerm} = require('./bookapi.js')
+const {searchByTerm, getVolumeData, getSingleVolumeData} = require('./bookapi.js')
 const {storeReturnTo} = require('./middleware');
 // const {getBooks, createBook} = require('./database.js');
 const {createNewBook, addBookToShelf, getUserLibrary, getBook, updateBook, deleteBook, getAllBooks} = require('./controllers/books.js')
@@ -115,9 +115,18 @@ app.get('/search', (req,res)=>{
 
 app.post('/search', async(req,res)=>{
     // console.log(req.body);
-    const books = await searchByTerm(req.body.q);
-    res.redirect('/search');
+    const results = await searchByTerm(req.body.q);
+    console.log(results);
+    // const vData = await getVolumeData(results);
+    // console.log(`data from array: ${vData}`);
+    // const sData = await getSingleVolumeData(results.items[0]);
+    // console.log(`single data:${sData}`);
+    res.render('result', {results});
 })
+
+// app.get('/search/result', (req,res)=>{
+//     res.render('search/result', {books});
+// })
 
 app.get('/register', async(req,res)=>{
     res.render('users/register')

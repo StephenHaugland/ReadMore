@@ -1,0 +1,37 @@
+<% layout('layouts/boilerplate')%>
+
+
+<div>
+    
+    <a href="/entries">Back to entries</a>
+    <% if(results) {%>
+        <h3>Top Search results:</h3>
+        <% for (let b of results) { %>
+            <div class="card mb-3" style="max-width: 500px;">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img src="<%= (b.volumeInfo.imageLinks.smallThumbnail) %>"
+                     class="img-fluid rounded-start" alt="...">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title"><%= b.volumeInfo.title %></h5>
+                      <p class="card-text"><%= b.volumeInfo.subtitle %></p>
+                      <p class="card-text"><%= b.volumeInfo.authors %></p>
+                      <p class="card-text"><small class="text-muted"><%= b.volumeInfo.categories %></small></p>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          <!-- <p><%= b.volumeInfo.title %></p>
+          <p><%= b.volumeInfo.subtitle %></p>
+          <p><%= b.volumeInfo.description %></p>
+          <p><%= b.volumeInfo.categories %></p>
+
+
+          <p><%= b.volumeInfo.authors %></p>
+            <img styles="max-width:200px" src="<%= (b.volumeInfo.imageLinks.smallThumbnail) %>" alt=""> -->
+
+        <%} %>
+    <% } %>
+</div>

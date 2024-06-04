@@ -2,7 +2,6 @@ module.exports.searchByTerm = async (term)=>{
     const searchResult = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${term}`);
     const books = await searchResult.json();
     bookArray = books.items;
-    
     return bookArray;
 }
 

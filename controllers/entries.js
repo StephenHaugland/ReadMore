@@ -22,7 +22,7 @@ module.exports.createNewEntry = async (entry) =>  {
 
 module.exports.getEntry = async (eID) =>{
     const entry = await Entry.findOne({_id:eID})
-    .populate({path: 'book', select: 'title author fiction genre'})
+    .populate({path: 'book', select: 'coverUrl title subtitle author genre'})
     return entry;
 }
 

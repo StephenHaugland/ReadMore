@@ -109,19 +109,20 @@ app.get('/', (req,res) => {
 })
 
 app.get('/search', (req,res)=>{
-    const books= {};
-    res.render('search', {books});
+    let populate=false ;
+    res.render('search', {populate});
 })
 
 app.post('/search', async(req,res)=>{
     // console.log(req.body);
     const results = await searchByTerm(req.body.q);
-    console.log(results);
+    populate = true;
+    // console.log(results);
     // const vData = await getVolumeData(results);
     // console.log(`data from array: ${vData}`);
     // const sData = await getSingleVolumeData(results.items[0]);
     // console.log(`single data:${sData}`);
-    res.render('result', {results});
+    res.render('search', {results, populate});
 })
 
 // app.get('/search/result', (req,res)=>{
@@ -139,8 +140,8 @@ app.post('/register', async(req,res)=>{
         const registeredUser = await User.register(user,password);
         req.login(registeredUser, err=> {
             if(err) return next(err);
-            req.flash('success', "Welcome to Yelp Camp!");
-            res.redirect('/library');
+            req.flash('success', "Welcome to ReadMore!");
+            res.redirect('/entries');
         })
     } catch(e) {
         req.flash('error', e.message);
@@ -186,7 +187,7 @@ app.get('/books', async (req,res)=>{
     // console.log(shelves);
     // const {read} = shelves;
     // console.log(read)
-
+    
     // LEGACY SQL, DELETE LATER
     // query sql server for books
     // const books = await getBooks();
@@ -289,8 +290,9 @@ app.put('/entries/:id', async(req,res)=>{
 // retreive and show 1 entry
 app.get('/entries/:id', async(req,res)=>{
     const entry = await getEntry(req.params.id);
-    const {book, shelf, notes} = entry;
-    res.render('entries/show', {book, shelf, notes, entry})
+    // const {book, shelf, notes} = entry;
+    console.log(`book cover img: ${entry.book.coverUrl}`)
+    res.render('entries/show', {entry})
 })
 
 // delete route to remove 1 entry by id

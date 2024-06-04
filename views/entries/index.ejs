@@ -1,38 +1,20 @@
 <% layout('layouts/boilerplate')%>
+
+
+
 <div>
     <div class="container mb-3"><h1>All Entries</h1></div>
-    <a href="/entries/new" class="btn btn-success">+ Add Entry</a>
+    <a href="search" class="btn btn-success">+ Add Entry</a>
 
         <% for (let e of entries) { %>
-            <div class="row row-cols-2 row-cols-md-4 g-4">
+            <div class="container">
                 <div class="col">
-                    <div class="card mb-3" style="max-width: 540px;">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F49%2F60%2F7c%2F49607c19eaf6e456ac6f06ad4688f337.jpg&f=1&nofb=1&ipt=5ddfaf4c68b548d1a7318160d91f06090210fee889e97209ff5054125d0615c4&ipo=images""
-                                class="img-fluid rounded-start" alt="...">
-                            </div>
-                            <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title"><a href="books/<%=e.book._id%>"><%= e.book.title %></a></h5>
-                                <p class="card-text"><%= e.book.author %></p>
-                                <p class="card-text"><small class="text-muted"><%= e.book.fic %> - <%= e.book.genre %></small></p>
-                                <span class="badge rounded-pill bg-primary"><%= e.shelf %></span>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="container">
-                            <h4> Notes</h4>
-                            <p><%= e.notes %></p>
-                        </div>
-                        <a class="btn btn-primary" href="entries/<%=e._id%>/edit">Edit</a>
-                        <form action="/entries/<%=e._id%>?_method=DELETE" method="POST">
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
-
+                    <div class="row d-inline my-5">
+                        <!-- <img src="<%= e.book.coverUrl %>" style="width: 60px;" class="img-fluid" alt="..."> -->
+                        <p class="d-inline"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <span class="badge rounded-pill bg-primary"><%= e.shelf %></span></p>
                     </div>
                 </div>
-            </div>        
+            </div>     
         <% } %>
     
 

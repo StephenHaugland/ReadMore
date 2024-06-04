@@ -2,21 +2,64 @@
 
 
 <div>
-    <div class="card mb-3" style="max-width: 540px;">
-        <div class="row g-0">
-          <div class="col-md-4">
-            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F49%2F60%2F7c%2F49607c19eaf6e456ac6f06ad4688f337.jpg&f=1&nofb=1&ipt=5ddfaf4c68b548d1a7318160d91f06090210fee889e97209ff5054125d0615c4&ipo=images""
-             class="img-fluid rounded-start" alt="...">
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title"><%= book.title %></h5>
-              <p class="card-text"><%= book.author %></p>
-              <p class="card-text"><small class="text-muted"><%= book.fic %> - <%= book.genre %></small></p>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <div class="card mb-3" style="max-width: 540px;">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img src="<%= book.coverUrl %>"
+               class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title"><%= book.title %></h5>
+                <h6><%= book.subtitle %></h6>
+                <p class="card-text"><%= book.author %></p>
+                <p class="card-text"><%= book.genre %></p>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+      <div class="col-sm">
+        <h2>Reading Information</h2>
+        <form action="/entries" method="POST" novalidate class="validated-form">
+          <input type = "hidden" name = "entry[book]" value ="<%= book._id %>" />
+          <div class="mb-3">
+              <label class="form-label" for="notes">Notes about book:</label>
+              <input class="form-control" type="text" id="notes" name="entry[notes]" required>
+          </div>
+
+          <div class="mb-3">
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" id="read" name="entry[shelf]"required value="read"></input>
+                  <label class="form-check-label" for="read">Read</label>
+              </div>
+              
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" id="Reading" name="entry[shelf]"required value="reading"></input>
+                  <label class="form-check-label" for="Reading">Reading</label>
+              </div>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" id="WantToRead" name="entry[shelf]"required value="wantToRead"></input>
+                  <label class="form-check-label" for="WantToRead">Want to Read</label>
+              </div>
+              
+          </div>
+          
+          <div class="mb-3">
+              <button class="btn btn-success">Add book to shelf</button>
+          </div>
+      </form>
+
+      </div>
+
+
     </div>
+  </div>
+    
+    
 
     <a href="/books/<%=book._id%>/edit">Edit</a>
 
@@ -27,4 +70,4 @@
           Delete
       </button>
   </form>
-    </div>
+</div>

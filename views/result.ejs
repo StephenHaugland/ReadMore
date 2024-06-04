@@ -10,8 +10,9 @@
             <div class="card mb-3" style="max-width: 500px;">
                 <div class="row g-0">
                   <div class="col-md-4">
-                    <img src="<%= (b.volumeInfo.imageLinks.smallThumbnail) %>"
-                     class="img-fluid rounded-start" alt="...">
+                    <% let thumbnail="" %>
+                    <% try {thumbnail = b.volumeInfo.imageLinks.smallThumbnail} catch(e) {thumbnail="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F49%2F60%2F7c%2F49607c19eaf6e456ac6f06ad4688f337.jpg&f=1&nofb=1&ipt=5ddfaf4c68b548d1a7318160d91f06090210fee889e97209ff5054125d0615c4&ipo=images"}%>
+                    <img src="<%= thumbnail%>"  class="img-fluid rounded-start" alt="...">
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
@@ -19,18 +20,23 @@
                       <p class="card-text"><%= b.volumeInfo.subtitle %></p>
                       <p class="card-text"><%= b.volumeInfo.authors %></p>
                       <p class="card-text"><small class="text-muted"><%= b.volumeInfo.categories %></small></p>
+
+                      <form action="/books" method="POST" novalidate class="validated-form">
+                            <input type = "hidden" name = "book[title]" value ="<%= b.volumeInfo.title %>" />
+                            <input type = "hidden" name = "book[subtitle]" value ="<%= b.volumeInfo.subtitle %>" />
+                            <input type = "hidden" name = "book[coverUrl]" value ="<%= thumbnail %>" />
+                            <input type = "hidden" name = "book[author]" value ="<%= b.volumeInfo.authors %>" />
+                            <input type = "hidden" name = "book[genre]" value ="<%= b.volumeInfo.categories %>" /> 
+                        <div class="mb-3">
+                            <button class="btn btn-success">Select Book</button>
+                        </div>
+                    </form>
+
                     </div>
                   </div>
                 </div>
             </div>
-          <!-- <p><%= b.volumeInfo.title %></p>
-          <p><%= b.volumeInfo.subtitle %></p>
-          <p><%= b.volumeInfo.description %></p>
-          <p><%= b.volumeInfo.categories %></p>
 
-
-          <p><%= b.volumeInfo.authors %></p>
-            <img styles="max-width:200px" src="<%= (b.volumeInfo.imageLinks.smallThumbnail) %>" alt=""> -->
 
         <%} %>
     <% } %>

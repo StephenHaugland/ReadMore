@@ -1,7 +1,17 @@
 <% layout('layouts/boilerplate')%>
 <div class="row">
     <h1 class="text-center">New Entry</h1>
+
+    <form action="/search" method="POST">
+        <label for="search">Search: </label>
+        <input type="text" name="q" id="search">
+        <button class="btn btn primary">
+            Search
+        </button>
+    </form>
+
     <div class="col-md-6 offset-md-3">
+
         <form action="/entries" method="POST" novalidate class="validated-form">
             <!-- <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
@@ -30,6 +40,8 @@
                 <label class="form-label" for="bookID">Book ID:</label>
                 <input class="form-control" type="text" id="bookID" name="entry[book]" required>
             </div>
+
+          
 
             
 

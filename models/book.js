@@ -11,12 +11,9 @@ const BookSchema = new Schema({
     isbn: String,
     coverUrl: String,
     title: String,
-    author: String,
-    genre: String,
-    fiction: {
-        type: String,
-        enum: ['Fiction', 'Non-Fiction']
-    }
+    subtitle: String,
+    author: [{type: String}],
+    genre: [{type: String}]
 });
 
 module.exports = mongoose.model('Book', BookSchema);

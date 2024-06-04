@@ -9,12 +9,13 @@
             <div class="card mb-3" style="max-width: 540px;">
                 <div class="row g-0">
                   <div class="col-md-4">
-                    <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F49%2F60%2F7c%2F49607c19eaf6e456ac6f06ad4688f337.jpg&f=1&nofb=1&ipt=5ddfaf4c68b548d1a7318160d91f06090210fee889e97209ff5054125d0615c4&ipo=images""
-                     class="img-fluid rounded-start" alt="...">
+                    <img src="<%= b.coverUrl %>"
+                    class="img-fluid rounded-start" alt="...">
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
                       <h5 class="card-title"><a href="books/<%=b._id%>"><%= b.title %></a></h5>
+                      <h6> <%=b.subtitle%></h6>
                       <p class="card-text"><%= b.author %></p>
                       <p class="card-text"><small class="text-muted"><%= b.fic %> - <%= b.genre %></small></p>
                       <!-- <span class="badge rounded-pill bg-primary"></span> -->

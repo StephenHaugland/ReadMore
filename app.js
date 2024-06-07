@@ -18,7 +18,7 @@ const {searchByTerm, getVolumeData, getSingleVolumeData} = require('./bookapi.js
 const {storeReturnTo} = require('./middleware');
 // const {getBooks, createBook} = require('./database.js');
 const {createNewBook, addBookToShelf, getUserLibrary, getBook, updateBook, deleteBook, getAllBooks} = require('./controllers/books.js')
-const {createNewEntry, getEntry, updateEntry, deleteEntry} = require('./controllers/entries');
+const {createNewEntry, getEntry, updateEntry, deleteEntry, getEntryByBook} = require('./controllers/entries');
 const {addEntry, getAllEntries, removeEntry} = require('./controllers/users');
 
 
@@ -219,6 +219,7 @@ app.post('/books', async(req,res)=>{
 
 // route to show book edit page
 app.get('/books/:id/edit', async(req,res)=>{
+    
     const book = await getBook(req.params.id);
     res.render('books/edit', {book})
 })
@@ -227,8 +228,11 @@ app.get('/books/:id/edit', async(req,res)=>{
 app.put('/books/:id', async(req,res)=>{
     const {id} = req.params;
     const {book} = req.body;
-    const updatedBook = await updateBook(book,id)
-    res.redirect(`/books/${id}`);
+    const updatedBook = await updateBook(book,id);
+    const updatedEntry = await getEntryByBook(id);
+    const redirectUrl = `/entries/${updatedEntry._id}` || '/books/${id}';
+    // delete req.session.returnTo;
+    res.redirect(redirectUrl)
 })
 
 // delete route to remove 1 book by id
@@ -262,9 +266,9 @@ app.get('/entries/new', (req,res) => {
 app.post('/entries', async(req,res)=>{
     // create new entry using data supplied from form
     const {entry} = req.body;
-    console.log(`entry from form: ${{entry}}`);
+    // console.log(`entry from form: ${{entry}}`);
     const newEntry = await createNewEntry(entry);
-    console.log(`entry created from db: ${newEntry}`)
+    // console.log(`entry created from db: ${newEntry}`)
 
     // add newly created entry to user profile
     const userID = res.locals.currentUser._id;
@@ -291,7 +295,7 @@ app.put('/entries/:id', async(req,res)=>{
 app.get('/entries/:id', async(req,res)=>{
     const entry = await getEntry(req.params.id);
     // const {book, shelf, notes} = entry;
-    console.log(`book cover img: ${entry.book.coverUrl}`)
+    // console.log(`book cover img: ${entry.book.coverUrl}`)
     res.render('entries/show', {entry})
 })
 

@@ -1,12 +1,14 @@
 <% layout('layouts/boilerplate')%>
 <div class="container">
+  <a href="/entries">Back to all entries</a>
+
   <div class="row">
     <div class="col-sm">
-      <div class="card mb-3" style="max-width: 540px;">
+      <div class="card mb-3" style="max-width: 600px;">
         <div class="row g-0">
           <div class="col-md-4">
             <img src="<%= entry.book.coverUrl %>"
-             class="img-fluid rounded-start" alt="...">
+             class="img-thumbnail float-start w-100" alt="...">
           </div>
           <div class="col-md-8">
             <div class="card-body">
@@ -17,25 +19,48 @@
               <p class="card-text"><small class="text-muted"><%= entry.book.genre %></small></p>
             </div>
           </div>
+        </div>  
+        <div class="">
+          <a class="btn btn-sm btn-dark" href="/books/<%= entry.book._id %>/edit" role="button">Edit Book Details</a>
         </div>
+
       </div>
+
     </div>
     <div class="col-sm">
       <h2>Reading Information</h2>
       <div>
-        <p>Currently in shelf: <%= entry.shelf %></p>
+        <form action="/entries/<%=entry._id%>?_method=PUT" method="POST" novalidate class="validated-form">
+          <input type = "hidden" name = "entry[book]" value ="<%= entry.book._id %>" />
+
+          <div class="mb-3">
+            <h6>Shelf</h6>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="read" name="entry[shelf]"required value="Read" <%= entry.shelf=='Read' ? 'checked' : '' %>>
+                <label class="form-check-label" for="read">Read</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="Reading" name="entry[shelf]"required value="Reading" <%= entry.shelf=='Reading' ? 'checked' : '' %>>
+                <label class="form-check-label" for="Reading">Reading</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="WantToRead" name="entry[shelf]"required value="Want to Read" <%= entry.shelf=='Want to Read' ? 'checked' : '' %>>
+                <label class="form-check-label" for="WantToRead">Want to Read</label>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="notes" class="form-label">Notes</label>
+            <textarea class="form-control" id="notes" name="entry[notes]" rows="3"><%= entry.notes %></textarea>
+          </div>
+          <div class="mb-3">
+            <button class="btn btn-sm btn-success">Update Reading Details</button>
+          </div>
+        </form>
       </div>
 
-      <div>
-          <p>Notes about book: <%= entry.notes %></p>
-      </div>
-
-      <a href="/entries/<%=entry._id%>/edit">Edit</a>
-
-
-      <a href="/entries">Back to all entries</a>
+     
       <form action="/entries/<%=entry._id%>?_method=DELETE" method="POST">
-          <button class="btn btn-sm btn-danger">Delete</button>
+          <button class="btn btn-sm btn-danger">Remove Entry</button>
       </form>
 
     </div>

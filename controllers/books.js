@@ -42,7 +42,7 @@ module.exports.updateBook = async (book,bID) => {
         {...book},
         {new: 'true'}
     );
-    console.log(`updated book: ${updatedBook}`);
+    // console.log(`updated book: ${updatedBook}`);
     await updatedBook.save();
 
     // add updated book to new shelf

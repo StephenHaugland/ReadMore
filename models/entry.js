@@ -11,7 +11,7 @@ const EntrySchema = new Schema({
     },
     shelf: {
         type: String,
-        enum: ['read','wantToRead','reading'],
+        enum: ['Read','Want to Read','Reading'],
         required:true
     },
     notes: String    

@@ -26,6 +26,12 @@ module.exports.getEntry = async (eID) =>{
     return entry;
 }
 
+module.exports.getEntryByBook = async (bID) => {
+    const entry = await Entry.findOne({book:bID});
+    // console.log(entry);
+    return entry;
+}
+
 module.exports.updateEntry = async (entry, eID) => {
     const updatedEntry = await Entry.findByIdAndUpdate(eID,{...entry});
     await updatedEntry.save();

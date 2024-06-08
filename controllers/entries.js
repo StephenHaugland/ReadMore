@@ -59,3 +59,19 @@ module.exports.deleteEntry = async (eID) => {
     await Entry.findOneAndDelete({_id:eID});
 }
 
+module.exports.sortByShelf = async (entries) => {
+    let read = [];
+    let reading = [];
+    let wantToRead = [];
+    console.log(read)
+    for (let e of entries){
+        if (e.shelf === 'Read'){
+            read.push(e)
+        } else if(e.shelf === 'Reading') {
+            reading.push(e)
+        } else if(e.shelf === 'Want to Read'){
+            wantToRead.push(e);
+        }
+    }
+    return {read,wantToRead,reading};
+}

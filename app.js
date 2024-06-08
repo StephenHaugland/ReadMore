@@ -18,7 +18,7 @@ const {searchByTerm, getVolumeData, getSingleVolumeData} = require('./bookapi.js
 const {storeReturnTo} = require('./middleware');
 // const {getBooks, createBook} = require('./database.js');
 const {createNewBook, addBookToShelf, getUserLibrary, getBook, updateBook, deleteBook, getAllBooks} = require('./controllers/books.js')
-const {createNewEntry, getEntry, updateEntry, deleteEntry, getEntryByBook} = require('./controllers/entries');
+const {createNewEntry, getEntry, updateEntry, deleteEntry, getEntryByBook, sortByShelf} = require('./controllers/entries');
 const {addEntry, getAllEntries, removeEntry} = require('./controllers/users');
 
 
@@ -253,7 +253,9 @@ app.delete('/books/:id', async (req,res)=>{
 app.get('/entries', async (req,res)=>{
     const userID = res.locals.currentUser._id;
     const entries = await getAllEntries(userID);
-    res.render('entries/index', {entries});
+    const shelfSortedEntries = await sortByShelf(entries);
+    console.log(shelfSortedEntries);
+    res.render('entries/index', {entries, shelfSortedEntries});
 })
 
 // render new entry form page

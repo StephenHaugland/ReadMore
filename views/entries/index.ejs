@@ -6,16 +6,30 @@
     <div class="container mb-3"><h1>All Entries</h1></div>
     <a href="search" class="btn btn-success">+ Add Entry</a>
 
-        <% for (let e of entries) { %>
-            <div class="container">
-                <div class="col">
-                    <div class="row d-inline my-5">
-                        <!-- <img src="<%= e.book.coverUrl %>" style="width: 60px;" class="img-fluid" alt="..."> -->
-                        <p class="d-inline"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <span class="badge rounded-pill bg-primary"><%= e.shelf %></span></p>
-                    </div>
-                </div>
-            </div>     
-        <% } %>
-    
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2>Read</h2>
+                <% for (let e of shelfSortedEntries.read) { %>
+                    <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <span class="badge rounded-pill bg-primary"><%= e.shelf %></span></p>
+                <% } %>
+            </div>
+            <div class="col">
+                <h2>Reading</h2>
+                <% for (let e of shelfSortedEntries.reading) { %>
+                    <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <span class="badge rounded-pill bg-primary"><%= e.shelf %></span></p>
+                <% } %>
+            </div>
+            <div class="col">
+                <h2>Want to Read</h2>
+                <% for (let e of shelfSortedEntries.wantToRead) { %>
+                    <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <span class="badge rounded-pill bg-primary"><%= e.shelf %></span></p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+  
 
 </div>

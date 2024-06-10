@@ -9,6 +9,8 @@ const Schema = mongoose.Schema;
 
 const BookSchema = new Schema({
     isbn: String,
+    pageCount: Number,
+    description: String,
     coverUrl: String,
     title: String,
     subtitle: String,

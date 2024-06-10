@@ -1,50 +1,67 @@
 <% layout('layouts/boilerplate')%>
 
 
-<div class="container">
-    <form action="/search" method="POST">
-        <label for="search">Search: </label>
-        <input type="text" name="q" id="search">
-        <button>
-            Search For Book
-        </button>
-    </form>
-    <a href="/entries">Back to Entries</a>
+<div class="container mb-3">
+    <a href="/entries">Back to Entries</a>  
+
+    <div class="row text-center">
+
+            <form action="/search" method="POST">
+                <input type="text" name="q" id="search">
+                <button class="btn btn-sm btn-secondary mb-1">
+                    Search For Book
+                </button>
+            </form>
+
+    </div>
     
 </div>
 <% if(populate) {%>
-    <h3>Search results:</h3>
-    <% for (let b of results) { %>
-        <div class="card mb-3" style="max-width: 500px;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <% let thumbnail="" %>
-                <% try {thumbnail = b.volumeInfo.imageLinks.smallThumbnail} catch(e) {thumbnail="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F49%2F60%2F7c%2F49607c19eaf6e456ac6f06ad4688f337.jpg&f=1&nofb=1&ipt=5ddfaf4c68b548d1a7318160d91f06090210fee889e97209ff5054125d0615c4&ipo=images"}%>
-                <img src="<%= thumbnail%>"  class="img-fluid rounded-start" alt="...">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title"><%= b.volumeInfo.title %></h5>
-                  <p class="card-text"><%= b.volumeInfo.subtitle %></p>
-                  <p class="card-text"><%= b.volumeInfo.authors %></p>
-                  <p class="card-text"><small class="text-muted"><%= b.volumeInfo.categories %></small></p>
+    <div class="container px-0">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2">
+                <% for (let b of results) { %>
+                    <div class="card mb-2">
+                        <div class="row g-0">
+                          <div class="col-4 col-lg-3">
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="my-2" id="thumbnail">
+                                        <% let thumbnail="" %>
+                                        <% try {thumbnail = b.volumeInfo.imageLinks.smallThumbnail} catch(e) {thumbnail="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F49%2F60%2F7c%2F49607c19eaf6e456ac6f06ad4688f337.jpg&f=1&nofb=1&ipt=5ddfaf4c68b548d1a7318160d91f06090210fee889e97209ff5054125d0615c4&ipo=images"}%>
+                                        <img src="<%= thumbnail%>" class="img-fluid rounded" alt="book cover">
+                                    </div>
+                                        <div class="container">
+                                            <form action="/books" method="POST" novalidate class="validated-form">
+                                                <input type = "hidden" name = "book[title]" value ="<%= b.volumeInfo.title %>" />
+                                                <input type = "hidden" name = "book[subtitle]" value ="<%= b.volumeInfo.subtitle %>" />
+                                                <input type = "hidden" name = "book[coverUrl]" value ="<%= thumbnail %>" />
+                                                <input type = "hidden" name = "book[author]" value ="<%= b.volumeInfo.authors %>" />
+                                                <input type = "hidden" name = "book[genre]" value ="<%= b.volumeInfo.categories %>" /> 
+                                                <div class="d-flex justify-content-center mb-2">
+                                                    <button class="btn btn-sm btn-success px-3"><span>Select Book</span></button>
+                                                </div>
+                                            </form>
+        
+                                        </div>
+                                    
+                                </div>                                
+                            </div>
 
-                  <form action="/books" method="POST" novalidate class="validated-form">
-                        <input type = "hidden" name = "book[title]" value ="<%= b.volumeInfo.title %>" />
-                        <input type = "hidden" name = "book[subtitle]" value ="<%= b.volumeInfo.subtitle %>" />
-                        <input type = "hidden" name = "book[coverUrl]" value ="<%= thumbnail %>" />
-                        <input type = "hidden" name = "book[author]" value ="<%= b.volumeInfo.authors %>" />
-                        <input type = "hidden" name = "book[genre]" value ="<%= b.volumeInfo.categories %>" /> 
-                    <div class="mb-3">
-                        <button class="btn btn-success">Select Book</button>
+                          </div>
+                          <div class="col-8 col-lg-9">
+                            <div class="card-body mx-1 px-0">
+                              <h5 class="card-title text-center mb-0"><%= b.volumeInfo.title %> <span class="badge bg-secondary" id="category"><%=b.volumeInfo.categories%></span></h5>
+                              <!-- <h6 class="card-subtitle text-muted text-center"><%= b.volumeInfo.subtitle %></h6> -->
+                              <p class="card-text text-center mt-0 mb-1"><small class="text-muted">by <%= b.volumeInfo.authors %></small></p>
+                              <% let shortDescription = '' %>
+                              <%try {if (b.volumeInfo.description.length>200) {shortDescription =b.volumeInfo.description.substring(0,200)+"..."} else {shortDescription = b.volumeInfo.description} } catch(e) { shortDescription ="No description availale"}%>
+                              <p class="card-text mx-2"><span style="display:inline-block; width: 20px;"></span><%= shortDescription %></p>
+                            </div>
+                          </div>
+                        </div>
                     </div>
-                </form>
-
-                </div>
-              </div>
-            </div>
+                <%} %>
         </div>
-
-
-    <%} %>
+    </div>
+ 
 <% } %>

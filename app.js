@@ -117,7 +117,7 @@ app.post('/search', async(req,res)=>{
     // console.log(req.body);
     const results = await searchByTerm(req.body.q);
     populate = true;
-    // console.log(results);
+    console.log(results);
     // const vData = await getVolumeData(results);
     // console.log(`data from array: ${vData}`);
     // const sData = await getSingleVolumeData(results.items[0]);

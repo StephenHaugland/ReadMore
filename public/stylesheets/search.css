@@ -1,0 +1,18 @@
+#thumbnail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+   
+}
+
+#thumbnail img {
+    flex-shrink: 0;
+    min-width: 100%;
+    min-height: 100%
+}
+
+#category { 
+font-size: .6em;
+margin-bottom: 2;
+}

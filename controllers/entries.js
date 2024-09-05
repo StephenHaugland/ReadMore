@@ -22,8 +22,14 @@ module.exports.createNewEntry = async (entry) =>  {
 
 module.exports.getEntry = async (eID) =>{
     const entry = await Entry.findOne({_id:eID})
-    .populate({path: 'book', select: 'coverUrl title subtitle author genre'})
+    .populate({path: 'book', select: 'coverUrl title subtitle description pageCount author genre'})
     return entry;
+}
+
+module.exports.getFilteredEntries = async (filter, uID) => {
+    const entries = await Entry.find({genre:filter})
+    .populate({path: 'book', select: 'coverUrl title subtitle description pageCount author genre'})
+    return entries;
 }
 
 module.exports.getEntryByBook = async (bID) => {
@@ -63,7 +69,7 @@ module.exports.sortByShelf = async (entries) => {
     let read = [];
     let reading = [];
     let wantToRead = [];
-    console.log(read)
+    // console.log(read)
     for (let e of entries){
         if (e.shelf === 'Read'){
             read.push(e)

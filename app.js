@@ -15,11 +15,11 @@ const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const {searchByTerm, getVolumeData, getSingleVolumeData} = require('./bookapi.js')
-const {storeReturnTo} = require('./middleware');
+const {storeReturnTo, isLoggedIn} = require('./middleware');
 // const {getBooks, createBook} = require('./database.js');
 const {createNewBook, addBookToShelf, getUserLibrary, getBook, updateBook, deleteBook, getAllBooks} = require('./controllers/books.js')
 const {createNewEntry, getEntry, updateEntry, deleteEntry, getEntryByBook, sortByShelf} = require('./controllers/entries');
-const {addEntry, getAllEntries, removeEntry} = require('./controllers/users');
+const {addEntry, getAllEntries, removeEntry, getFilteredEntries} = require('./controllers/users');
 
 
 const mongoSanitize = require('express-mongo-sanitize');
@@ -105,7 +105,15 @@ app.use((req,res,next) =>{
 
 
 app.get('/', (req,res) => {
-    res.render('users/login')
+    if(!req.isAuthenticated()){
+        return res.render('home')
+    }
+    res.redirect('/entries')
+})
+
+app.get('/home', (req,res)=>{
+
+    res.render('home')
 })
 
 app.get('/search', (req,res)=>{
@@ -155,7 +163,7 @@ app.get('/login', async(req,res)=>{
 
 app.post('/login', storeReturnTo, passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), async(req,res)=>{
     req.flash('success', 'Welcome Back!');
-    const redirectUrl = res.locals.returnTo || '/library';
+    const redirectUrl = res.locals.returnTo || '/entries';
     // delete req.session.returnTo;
     res.redirect(redirectUrl);
 
@@ -168,7 +176,7 @@ app.get('/logout', async (req,res)=>{
         }
     });
     req.flash('success', 'Goodbye!');
-    res.redirect('/library');
+    res.redirect('/');
 })
 
 
@@ -251,11 +259,18 @@ app.delete('/books/:id', async (req,res)=>{
 
 // index page for all entries
 app.get('/entries', async (req,res)=>{
+    let filter = "";
     const userID = res.locals.currentUser._id;
+    if (req.query.genre){
+        console.log(`user searched for ${req.query.genre}`);
+        filter = req.query.genre;
+        const filteredEntries = await getFilteredEntries(filter, userID);
+        console.log(filteredEntries);
+    }
     const entries = await getAllEntries(userID);
     const shelfSortedEntries = await sortByShelf(entries);
-    console.log(shelfSortedEntries);
-    res.render('entries/index', {entries, shelfSortedEntries});
+    // console.log(shelfSortedEntries);
+    res.render('entries/index', {entries, shelfSortedEntries, filter});
 })
 
 // render new entry form page

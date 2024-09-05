@@ -37,6 +37,10 @@
                                                 <input type = "hidden" name = "book[coverUrl]" value ="<%= thumbnail %>" />
                                                 <input type = "hidden" name = "book[author]" value ="<%= b.volumeInfo.authors %>" />
                                                 <input type = "hidden" name = "book[genre]" value ="<%= b.volumeInfo.categories %>" /> 
+                                                <input type = "hidden" name = "book[description]" value ="<%= b.volumeInfo.description %>" /> 
+                                                <input type = "hidden" name = "book[pageCount]" value ="<%= b.volumeInfo.pageCount %>" /> 
+
+
                                                 <div class="d-flex justify-content-center mb-2">
                                                     <button class="btn btn-sm btn-success px-3"><span>Select Book</span></button>
                                                 </div>
@@ -54,8 +58,9 @@
                               <!-- <h6 class="card-subtitle text-muted text-center"><%= b.volumeInfo.subtitle %></h6> -->
                               <p class="card-text text-center mt-0 mb-1"><small class="text-muted">by <%= b.volumeInfo.authors %></small></p>
                               <% let shortDescription = '' %>
-                              <%try {if (b.volumeInfo.description.length>200) {shortDescription =b.volumeInfo.description.substring(0,200)+"..."} else {shortDescription = b.volumeInfo.description} } catch(e) { shortDescription ="No description availale"}%>
+                              <%try {if (b.volumeInfo.description.length>200) {shortDescription =b.volumeInfo.description.substring(0,200)+"..."} else {shortDescription = b.volumeInfo.description} } catch(e) { shortDescription ="No description available"}%>
                               <p class="card-text mx-2"><span style="display:inline-block; width: 20px;"></span><%= shortDescription %></p>
+                              <p class="card-text mx-2 text-center"> Page Count: <%= b.volumeInfo.pageCount %></p>
                             </div>
                           </div>
                         </div>

@@ -49,6 +49,20 @@
             </div>
         </div>
     </div>
+    
+    <% } else {%>
+        <div class="container mx-0 px-0">
+            <div class="row">
+                <div class="col-xs-12 col-md-4">
+                    <h3><%= filter %> (<%= filteredEntries.length %>)</h3>
+                    <% for (let e of filteredEntries) { %>
+                        <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <span class="badge bg-secondary" id="category"><%=e.book.genre%></span></p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+
     <% } %>
 
   

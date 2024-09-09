@@ -26,11 +26,6 @@ module.exports.getEntry = async (eID) =>{
     return entry;
 }
 
-module.exports.getFilteredEntries = async (filter, uID) => {
-    const entries = await Entry.find({genre:filter})
-    .populate({path: 'book', select: 'coverUrl title subtitle description pageCount author genre'})
-    return entries;
-}
 
 module.exports.getEntryByBook = async (bID) => {
     const entry = await Entry.findOne({book:bID});

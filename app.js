@@ -261,16 +261,30 @@ app.delete('/books/:id', async (req,res)=>{
 app.get('/entries', async (req,res)=>{
     let filter = "";
     const userID = res.locals.currentUser._id;
+    let filteredEntries = '';
+    const entries = await getAllEntries(userID);
     if (req.query.genre){
         console.log(`user searched for ${req.query.genre}`);
         filter = req.query.genre;
-        const filteredEntries = await getFilteredEntries(filter, userID);
-        console.log(filteredEntries);
+        let capitalizeString = (str) => {
+            str = str.toLowerCase();
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+        filter = capitalizeString(filter);
+        console.log(`filter parameter: ${filter}`);
+        try{
+            filteredEntries = await getFilteredEntries(filter, entries);
+            // console.log(filteredEntries);
+
+        }
+        catch(e){
+            console.log(e)
+        }
     }
-    const entries = await getAllEntries(userID);
     const shelfSortedEntries = await sortByShelf(entries);
     // console.log(shelfSortedEntries);
-    res.render('entries/index', {entries, shelfSortedEntries, filter});
+    console.log(`filteredentries: ${filteredEntries}`);
+    res.render('entries/index', {shelfSortedEntries, filteredEntries, filter});
 })
 
 // render new entry form page

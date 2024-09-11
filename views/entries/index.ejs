@@ -6,7 +6,7 @@
     <div class="container mb-3">
         <div class="row justify-content-start">
             <div class="col-auto">
-                <h1>All Entries</h1>
+                <h1><a class="shelfTitle"href="entries">All Entries</a></h1>
             </div>
             <div class="col-auto">
                 <a href="search" class="btn btn-success">+ Add Entry</a>
@@ -29,24 +29,31 @@
     <% if (filter === "") {%>
     <div class="container mx-0 px-0">
         <div class="row">
+            <% if (display.read) {%>
             <div class="col-xs-12 col-md-4">
-                <h3>Read (<%= shelfSortedEntries.read.length %>)</h3>
+                <h3><a class="shelfTitle" href="entries?shelf=read">Read</a> (<%= shelfSortedEntries.read.length %>)</h3>
                 <% for (let e of shelfSortedEntries.read) { %>
-                    <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <span class="badge bg-secondary" id="category"><%=e.book.genre%></span></p>
+                    <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <a href="entries?genre=<%=e.book.genre%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></p>
                 <% } %>
             </div>
+            <% } %>
+            <% if (display.reading) {%>
             <div class="col-xs-12 col-md-4">
-                <h3>Reading  (<%= shelfSortedEntries.reading.length %>)</h3>
+                <h3><a class="shelfTitle" href="entries?shelf=reading">Reading </a>  (<%= shelfSortedEntries.reading.length %>)</h3>
                 <% for (let e of shelfSortedEntries.reading) { %>
-                    <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <span class="badge bg-secondary" id="category"><%=e.book.genre%></span></p>
+                    <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <a href="entries?genre=<%=e.book.genre%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></p>
                 <% } %>
             </div>
+            <% } %>
+            <% if (display.wanttoread) {%>
+
             <div class="col-xs-12 col-md-4">
-                <h3>Want to Read  (<%= shelfSortedEntries.wantToRead.length %>)</h3>
+                <h3><a class="shelfTitle" href="entries?shelf=wanttoread">Want to Read</a> (<%= shelfSortedEntries.wantToRead.length %>)</h3>
                 <% for (let e of shelfSortedEntries.wantToRead) { %>
-                    <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <span class="badge bg-secondary" id="category"><%=e.book.genre%></span></p>
+                    <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <a href="entries?genre=<%=e.book.genre%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></p>
                 <% } %>
             </div>
+            <% } %>
         </div>
     </div>
     

@@ -259,6 +259,7 @@ app.delete('/books/:id', async (req,res)=>{
 
 // index page for all entries
 app.get('/entries', async (req,res)=>{
+    let display = {read:true,reading:true,wanttoread:true};
     let filter = "";
     const userID = res.locals.currentUser._id;
     let filteredEntries = '';
@@ -281,10 +282,18 @@ app.get('/entries', async (req,res)=>{
             console.log(e)
         }
     }
+    if (req.query.shelf){
+        display.read = false;
+        display.reading = false;
+        display.wanttoread = false;
+        display[req.query.shelf] = true;
+        console.log(`selected shelf: ${req.query.shelf}`);
+        console.log(`read: ${display.read}, reading: ${display.reading}, want:${display.wanttoread}`);
+    }
     const shelfSortedEntries = await sortByShelf(entries);
     // console.log(shelfSortedEntries);
     console.log(`filteredentries: ${filteredEntries}`);
-    res.render('entries/index', {shelfSortedEntries, filteredEntries, filter});
+    res.render('entries/index', {shelfSortedEntries, filteredEntries, filter, display});
 })
 
 // render new entry form page
@@ -306,6 +315,11 @@ app.post('/entries', async(req,res)=>{
     await addEntry(newEntry, userID);
 
     res.redirect(`/entries/${newEntry._id}`);
+})
+
+// route to show only read books
+app.get('/entries/read', async (req,res)=>{
+    res.render('entries/read')
 })
 
 // route to show entry edit page

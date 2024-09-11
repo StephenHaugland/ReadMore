@@ -1,0 +1,19 @@
+a.shelfTitle {
+    text-decoration: none;
+    color: #212529;
+}
+
+  
+
+span a {
+    text-decoration: none;
+    color:white;
+}
+
+span a:hover {
+    color:white;
+}
+
+span:hover {
+        background-color: #474c52!important;
+}

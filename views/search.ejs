@@ -4,13 +4,13 @@
 <div class="container mb-3">
     <a href="/entries">Back to Entries</a>  
 
-    <div class="row text-center">
+    <div class="text-center xs-10 md-4">
 
-            <form action="/search" method="POST">
-                <input type="text" name="q" id="search">
-                <button class="btn btn-sm btn-secondary mb-1">
-                    Search For Book
-                </button>
+            <form class="validated-form" action="/search" method="POST" novalidate>
+                <div class="d-inline-flex" >
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q" id="search" required>
+                    <button class="btn btn-outline-success" type="">Search</button>
+                </div>
             </form>
 
     </div>

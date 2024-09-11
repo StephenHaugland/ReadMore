@@ -16,11 +16,7 @@ module.exports.removeEntry = async (eID, uID) => {
 
 module.exports.getFilteredEntries = (filter, entries) => {
     // filter = filter.toLowerCase();
-    let capitalizeString = (str) => {
-        str = str.toLowerCase();
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-    filter = capitalizeString(filter);
+
     console.log(entries);
     // const lowercaseGenre = allEntries
     const filteredEntries = [];

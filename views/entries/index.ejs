@@ -6,21 +6,36 @@
     <div class="container mb-3">
         <div class="row justify-content-start">
             <div class="col-auto">
-                <h1><a class="shelfTitle"href="entries">All Entries</a></h1>
+                <h1><a class="shelfTitle"href="entries">Library</a></h1>
             </div>
             <div class="col-auto">
-                <a href="search" class="btn btn-success">+ Add Entry</a>
+                <a href="search" class="btn btn-success">+ Add Book</a>
             </div>
         </div>
     </div>
 
     <div class="container">
         <form action="/entries" method="GET">
-            <label for="filter">Filter by genre: </label>
-            <input type="text" name="genre" id="filter">
-            <button class="btn btn-primary">
-                Filter
-            </button>
+            <div class="d-inline-flex">
+                <!-- <label for="filter">Filter by genre: </label> -->
+                <input class="form-control" name="genre" list="genreOptions" id="filter" placeholder="Filter by genre" autocomplete="off" required>
+                <datalist id="genreOptions">
+                    <option value="Fiction">
+                    <option value="History">
+                    <option value="Nonfiction">
+                    <option value="Religious">
+                    <option value="Young Adult">
+                    <option value="Psychology">
+                    <option value="Economics">
+                        
+                        
+                    </datalist>
+                <button class="btn btn-primary">
+                    Filter
+                </button>
+
+            </div>
+            
 
         </form>
     </div>

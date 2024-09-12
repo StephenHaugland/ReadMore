@@ -17,3 +17,7 @@ span a:hover {
 span:hover {
         background-color: #474c52!important;
 }
+
+p.description {
+    text-indent: 20px;
+}

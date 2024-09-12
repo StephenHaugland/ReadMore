@@ -339,6 +339,7 @@ app.put('/entries/:id', async(req,res)=>{
 // retreive and show 1 entry
 app.get('/entries/:id', async(req,res)=>{
     const entry = await getEntry(req.params.id);
+    console.log(`page count is : ${entry.book.pageCount}`)
     // const {book, shelf, notes} = entry;
     // console.log(`book cover img: ${entry.book.coverUrl}`)
     res.render('entries/show', {entry})

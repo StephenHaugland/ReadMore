@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate')%>
 <div class="container">
-  <a href="/entries">Back to all entries</a>
+  <a href="/entries">Back to library</a>
 
   <div class="row">
     <div class="col-sm-2">
@@ -10,18 +10,10 @@
             <img src="<%= entry.book.coverUrl %>" class="img-thumbnail float-start w-100" alt="book cover">
              <div class="d-inline-flex">
                <a class="btn btn-sm btn-dark" href="/books/<%= entry.book._id %>/edit" role="button">Edit Book</a>
-               
-
              </div>
-
           </div>
-          
         </div>  
-        
-        
-
       </div>
-
     </div>
     <div class="col-sm-8">
       <div class="card">
@@ -47,7 +39,6 @@
           </div>
         </form>
       </div>
-    
     </div>
 
     <div class="col-sm-2 mt-2">
@@ -68,10 +59,11 @@
               <input class="form-check-input" type="radio" id="WantToRead" name="entry[shelf]"required onchange="this.form.submit()" value="Want to Read" <%= entry.shelf=='Want to Read' ? 'checked' : '' %>>
               <label class="form-check-label" for="WantToRead">Want to Read</label>
           </div>
-          <form action="/entries/<%=entry._id%>?_method=DELETE" method="POST">
-            <button class="btn btn-sm btn-danger my-1">Remove From Library</button>
-          </form>
+          
         </div>       
+      </form>
+      <form action="/entries/<%=entry._id%>?_method=DELETE" method="POST">
+        <button class="btn btn-sm btn-danger my-1">Remove From Library</button>
       </form>
       
     </div>

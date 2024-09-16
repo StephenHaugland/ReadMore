@@ -1,5 +1,7 @@
 <% layout('layouts/boilerplate')%>
 <div class="row">
+    <a href="/entries">Back to Library</a>
+
     <h1 class="text-center">New Book</h1>
     <div class="col-md-6 offset-md-3">
         <form action="/books" method="POST" novalidate class="validated-form">
@@ -69,6 +71,5 @@
                 <button class="btn btn-success">Add Book To Library</button>
             </div>
         </form>
-        <a href="/books">All Books</a>
     </div>
 </div>

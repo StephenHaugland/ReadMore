@@ -21,3 +21,27 @@ span:hover {
 p.description {
     text-indent: 20px;
 }
+
+img.entryIndex {
+    display:block;
+    width: auto;
+    height: auto;
+    max-width: 0px;
+    max-height: 60px;
+
+    
+}
+
+img.shelfView {
+    display:block;
+    width: auto;
+    height: auto;
+    max-width: 80px;
+    max-height: 60px;
+
+    
+}
+
+tr td {
+   }
+

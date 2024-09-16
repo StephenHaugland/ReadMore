@@ -1,0 +1,77 @@
+<% layout('layouts/boilerplate')%>
+
+
+
+<div class="mainContainer">
+    <div class="container mb-3">
+        <div class="row justify-content-start">
+            <div class="col-auto">
+                <a class="shelfTitle"href="/entries">Back to Library</a>
+                <h1><a class="shelfTitle" href="/entries/read">Read</a> (<%= shelfSortedEntries.read.length %>) <a class="btn btn-success" href="/search">+</a>
+                </h1>
+            </div>
+            <div>
+                <form class="validated-form" action="/entries/read" method="GET" novalidate>
+                    <div class="d-inline-flex">
+                        <!-- <label for="filter">Filter by genre: </label> -->
+                        <input class="form-control" name="genre" list="genreOptions" id="filter" placeholder="Filter by genre" autocomplete="off" required>
+                        <datalist id="genreOptions">
+                            <option value="Fiction">
+                            <option value="History">
+                            <option value="Nonfiction">
+                            <option value="Religious">
+                            <option value="Young Adult">
+                            <option value="Psychology">
+                            <option value="Economics">
+                            </datalist>
+                        <button class="btn btn-outline-primary">
+                            Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <% if (1 === 1) {%>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Cover</th>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Genre</th>
+                <th scope="col">Page Count</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% let entries = (filter==="")? shelfSortedEntries.read : filteredEntries %>
+                <% for (let e of entries) { %>
+                    <tr>
+                      <th scope="row"><img src="<%=e.book.coverUrl%>" class="img-fluid  shelfView mx-1" alt="cover"></th>
+                      <td><a href="/entries/<%=e._id%>"><%= e.book.title %></a></td>
+                      <td><%= e.book.author %></td>
+                      <td><a href="/entries/read?genre=<%=e.book.genre%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></td>
+                      <% let pages = (e.book.pageCount == null)? 'n/a':e.book.pageCount %>
+                      <td> <%=pages%></td>
+                    </tr>
+                <% } %>
+            </tbody>
+          </table>
+    <% }  else {%>
+        <div class="container mx-0 px-0">
+            <div class="row">
+                <div class="col-xs-12 col-md-4">
+                    <h3><%= filter %> (<%= filteredEntries.length %>)</h3>
+                    <% for (let e of filteredEntries) { %>
+                        <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <span class="badge bg-secondary" id="category"><%=e.book.genre%></span></p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+
+    <% } %>
+
+  
+
+</div>

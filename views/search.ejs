@@ -36,23 +36,23 @@
                                         <% try {thumbnail = b.volumeInfo.imageLinks.smallThumbnail} catch(e) {thumbnail="/images/genericbookcover.jpg"}%>
                                         <img src="<%= thumbnail%>" class="img-fluid rounded" alt="book cover">
                                     </div>
-                                        <div class="container">
-                                            <form action="/books" method="POST" novalidate class="validated-form">
-                                                <input type = "hidden" name = "book[title]" value ="<%= b.volumeInfo.title %>" />
-                                                <input type = "hidden" name = "book[subtitle]" value ="<%= b.volumeInfo.subtitle %>" />
-                                                <input type = "hidden" name = "book[coverUrl]" value ="<%= thumbnail %>" />
-                                                <input type = "hidden" name = "book[author]" value ="<%= b.volumeInfo.authors %>" />
-                                                <input type = "hidden" name = "book[genre]" value ="<%= b.volumeInfo.categories %>" /> 
-                                                <input type = "hidden" name = "book[description]" value ="<%= b.volumeInfo.description %>" /> 
-                                                <input type = "hidden" name = "book[pageCount]" value ="<%= b.volumeInfo.pageCount %>" /> 
+                                    <div class="container">
+                                        <form action="/books" method="POST" novalidate class="validated-form">
+                                            <input type = "hidden" name = "book[title]" value ="<%= b.volumeInfo.title %>" />
+                                            <input type = "hidden" name = "book[subtitle]" value ="<%= b.volumeInfo.subtitle %>" />
+                                            <input type = "hidden" name = "book[coverUrl]" value ="<%= thumbnail %>" />
+                                            <input type = "hidden" name = "book[author]" value ="<%= b.volumeInfo.authors %>" />
+                                            <input type = "hidden" name = "book[genre]" value ="<%= b.volumeInfo.categories %>" /> 
+                                            <input type = "hidden" name = "book[description]" value ="<%= b.volumeInfo.description %>" /> 
+                                            <input type = "hidden" name = "book[pageCount]" value ="<%= b.volumeInfo.pageCount %>" /> 
 
 
-                                                <div class="d-flex justify-content-center mb-2">
-                                                    <button class="btn btn-sm btn-success px-3"><span>Select Book</span></button>
-                                                </div>
-                                            </form>
-        
-                                        </div>
+                                            <div class="d-flex justify-content-center mb-2">
+                                                <button class="btn btn-sm btn-success px-3"><span>Select Book</span></button>
+                                            </div>
+                                        </form>
+    
+                                    </div>
                                     
                                 </div>                                
                             </div>

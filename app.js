@@ -319,7 +319,30 @@ app.post('/entries', async(req,res)=>{
 
 // route to show only read books
 app.get('/entries/read', async (req,res)=>{
-    res.render('entries/read')
+    let filter = "";
+    const userID = res.locals.currentUser._id;
+    let filteredEntries = '';
+    const entries = await getAllEntries(userID);
+    let shelfSortedEntries = await sortByShelf(entries);
+    if (req.query.genre){
+        console.log(`user searched for ${req.query.genre}`);
+        filter = req.query.genre;
+        let capitalizeString = (str) => {
+            str = str.toLowerCase();
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+        filter = capitalizeString(filter);
+        console.log(`filter parameter: ${filter}`);
+        try{
+            filteredEntries = await getFilteredEntries(filter, shelfSortedEntries.read);
+            console.log(filteredEntries);
+
+        }
+        catch(e){
+            console.log(e)
+        }
+    }
+    res.render('entries/read', {shelfSortedEntries, filteredEntries, filter})
 })
 
 // route to show entry edit page

@@ -21,7 +21,7 @@
         <form class="validated-form" action="/entries" method="GET" novalidate>
             <div class="d-inline-flex">
                 <!-- <label for="filter">Filter by genre: </label> -->
-                <input class="form-control" name="genre" list="genreOptions" id="filter" placeholder="Filter by genre" autocomplete="off" required>
+                <input class="form-control" name="genre" list="genreOptions" id="filter" placeholder="<%= (filter==="")?"Filter by genre":filter %>" autocomplete="off">
                 <datalist id="genreOptions">
                     <option value="Fiction">
                     <option value="History">
@@ -39,10 +39,9 @@
     </div>
 
 
-    <% if (filter === "") {%>
+    
     <div class="container mx-0 px-0">
         <div class="row">
-            <% if (display.read) {%>
             <div class="col-xs-12 col-md-4 px-0">
                 <h3><a class="shelfTitle" href="/entries/read">Read</a> (<%= shelfSortedEntries.read.length %>)</h3>
                 <% for (let e of shelfSortedEntries.read) { %>
@@ -52,8 +51,6 @@
                     </div>
                 <% } %>
             </div>
-            <% } %>
-            <% if (display.reading) {%>
             <div class="col-xs-12 col-md-4 px-0">
                 <h3><a class="shelfTitle" href="entries?shelf=reading">Reading </a>  (<%= shelfSortedEntries.reading.length %>)</h3>
                 <% for (let e of shelfSortedEntries.reading) { %>
@@ -63,9 +60,6 @@
                     </div>
                 <% } %>
             </div>
-            <% } %>
-            <% if (display.wanttoread ) {%>
-
             <div class="col-xs-12 col-md-4 px-0">
                 <h3><a class="shelfTitle" href="entries?shelf=wanttoread">Want to Read</a> (<%= shelfSortedEntries.wantToRead.length %>)</h3>
                 <% for (let e of shelfSortedEntries.wantToRead) { %>
@@ -75,24 +69,9 @@
                     </div>
                 <% } %>
             </div>
-            <% } %>
         </div>
     </div>
-    
-    <% } else {%>
-        <div class="container mx-0 px-0">
-            <div class="row">
-                <div class="col-xs-12 col-md-4">
-                    <h3><%= filter %> (<%= filteredEntries.length %>)</h3>
-                    <% for (let e of filteredEntries) { %>
-                        <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <span class="badge bg-secondary" id="category"><%=e.book.genre%></span></p>
-                    <% } %>
-                </div>
-            </div>
-        </div>
 
-
-    <% } %>
 
   
 

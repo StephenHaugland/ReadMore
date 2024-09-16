@@ -260,35 +260,30 @@ app.delete('/books/:id', async (req,res)=>{
 
 // index page for all entries
 app.get('/entries', async (req,res)=>{
-    let display = {read:true,reading:true,wanttoread:true};
     let filter = "";
     const userID = res.locals.currentUser._id;
     let filteredEntries = '';
     const entries = await getAllEntries(userID);
+    let shelfSortedEntries = '';
     if (req.query.genre){
         filter = capitalizeString(req.query.genre);
         console.log(`filter parameter: ${filter}`);
         try{
             filteredEntries = await getFilteredEntries(filter, entries);
             // console.log(filteredEntries);
-
+            shelfSortedEntries = await sortByShelf(filteredEntries);
         }
         catch(e){
             console.log(e)
         }
+    } else {
+        shelfSortedEntries = await sortByShelf(entries);
+        
     }
-    if (req.query.shelf){
-        display.read = false;
-        display.reading = false;
-        display.wanttoread = false;
-        display[req.query.shelf] = true;
-        console.log(`selected shelf: ${req.query.shelf}`);
-        console.log(`read: ${display.read}, reading: ${display.reading}, want:${display.wanttoread}`);
-    }
-    const shelfSortedEntries = await sortByShelf(entries);
+    
     // console.log(shelfSortedEntries);
     console.log(`filteredentries: ${filteredEntries}`);
-    res.render('entries/index', {shelfSortedEntries, filteredEntries, filter, display});
+    res.render('entries/index', {shelfSortedEntries, filteredEntries, filter});
 })
 
 // render new entry form page

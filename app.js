@@ -20,6 +20,7 @@ const {storeReturnTo, isLoggedIn} = require('./middleware');
 const {createNewBook, addBookToShelf, getUserLibrary, getBook, updateBook, deleteBook, getAllBooks} = require('./controllers/books.js')
 const {createNewEntry, getEntry, updateEntry, deleteEntry, getEntryByBook, sortByShelf} = require('./controllers/entries');
 const {addEntry, getAllEntries, removeEntry, getFilteredEntries} = require('./controllers/users');
+const {capitalizeString} = require('./utils/capitalizeString.js');
 
 
 const mongoSanitize = require('express-mongo-sanitize');
@@ -265,13 +266,7 @@ app.get('/entries', async (req,res)=>{
     let filteredEntries = '';
     const entries = await getAllEntries(userID);
     if (req.query.genre){
-        console.log(`user searched for ${req.query.genre}`);
-        filter = req.query.genre;
-        let capitalizeString = (str) => {
-            str = str.toLowerCase();
-            return str.charAt(0).toUpperCase() + str.slice(1);
-        }
-        filter = capitalizeString(filter);
+        filter = capitalizeString(req.query.genre);
         console.log(`filter parameter: ${filter}`);
         try{
             filteredEntries = await getFilteredEntries(filter, entries);
@@ -325,13 +320,7 @@ app.get('/entries/read', async (req,res)=>{
     const entries = await getAllEntries(userID);
     let shelfSortedEntries = await sortByShelf(entries);
     if (req.query.genre){
-        console.log(`user searched for ${req.query.genre}`);
-        filter = req.query.genre;
-        let capitalizeString = (str) => {
-            str = str.toLowerCase();
-            return str.charAt(0).toUpperCase() + str.slice(1);
-        }
-        filter = capitalizeString(filter);
+        filter = capitalizeString(req.query.genre);
         console.log(`filter parameter: ${filter}`);
         try{
             filteredEntries = await getFilteredEntries(filter, shelfSortedEntries.read);

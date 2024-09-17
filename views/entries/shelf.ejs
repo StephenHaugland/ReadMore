@@ -55,7 +55,7 @@
                 <% for (let e of entries) { %>
                     <tr>
                       <th scope="row"><img src="<%=e.book.coverUrl%>" class="img-fluid  shelfView mx-1" alt="cover"></th>
-                      <td><a href="/entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.subtitle %></td>
+                      <td><a href="/entries/<%=e._id%>"><%= e.book.title %></a> <br> <%= e.book.subtitle %></td>
                       <td><%= e.book.author %></td>
                       <td><a href="/entries?shelf=<%=shelf%>&genre=<%=e.book.genre%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></td>
                       <% let pages = (e.book.pageCount == null)? 'n/a':e.book.pageCount %>

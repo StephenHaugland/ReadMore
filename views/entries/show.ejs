@@ -5,7 +5,7 @@
 
   <div class="row">
     <div class="col-sm-2">
-      <div class="card mb-3" style="max-width: 600px;">
+      <div class="card mb-3" style="max-width: 400px;">
         <div class="row g-0">
           <div class="text-center">
             <img src="<%= entry.book.coverUrl %>" class="img-thumbnail float-start w-100" alt="book cover">
@@ -33,7 +33,7 @@
           <input type = "hidden" name = "entry[book]" value ="<%= entry.book._id %>" />
           <div class="">
             <label for="notes" class="form-label mt-2 mb-0">Notes</label>
-            <textarea class="form-control" id="notes" name="entry[notes]" rows="7"><%= entry.notes %></textarea>
+            <textarea class="form-control" id="notes" name="entry[notes]" rows="<%=Math.max(entry.notes.length/70,4) %>"><%= entry.notes %></textarea>
           </div>
           <div class="mb-3">
             <button class="btn btn-sm btn-success">Save Notes</button>

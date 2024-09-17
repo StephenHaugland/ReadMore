@@ -1,49 +1,83 @@
 <% layout('layouts/boilerplate')%>
-<div>
-    <h1>Edit Book</h1>
-    <form action="/books/<%= book._id %>?_method=PUT" method="POST" novalidate class="validated-form">
-        <div class="mb-3">
-            <label class="form-label" for="title">Title</label>
-            <input class="form-control" type="text" id="title" name="book[title]" required value="<%=book.title%>">
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="Author">Author</label>
-            <input class="form-control" type="text" id="author" name="book[author]" required value="<%= book.author %>">
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-        </div>
+<div class="container">
+  <a class="shelfTitle"href="/entries">Back to Library</a>
+  <h1>Edit Book</h1>
 
-        <div class="mb-3">
-            <label class="form-label" for="Genre">Genre</label>
-            <input class="form-control" type="text" id="genre" name="book[genre]" required value="<%= book.genre %>">
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-        </div>
 
-        <!-- <div class="mb-3">
-            <div>
-                <input class="form-check-input" type="radio" id="read" name="shelf"required value="read"></input>
-                <label class="form-check-label" for="read">Read</label>
-            </div>
-            <div>
-                <input class="form-check-input" type="radio" id="Reading" name="shelf"required value="reading"></input>
-                <label class="form-check-label" for="Reading">Reading</label>
-            </div>
-            <div>
-                <input class="form-check-input" type="radio" id="WanttoRead" name="shelf"required value="wantToRead"></input>
-                <label class="form-check-label" for="WanttoRead">Want To Read</label>
-            </div>
-            
-        </div> -->
+  <div class="row">
+    <div class=" col-sm-2">
+      <div class="card mb-3" style="max-width: 400px;">
+        <div class="row g-0">
+          <div class="text-center">
+            <img src="<%= book.coverUrl %>" class="img-thumbnail float-start w-100" alt="book cover">
+             <div class="d-inline-flex">
+               <a class="btn btn-sm btn-dark" href="/books/<%= book._id %>/edit" role="button">Edit Book</a>
+             </div>
+          </div>
+        </div>  
+      </div>
+    </div>
+    <div class="col-sm-10">
+      <div class="card">
+        <div class="card-body text-center col">
+            <form action="/books/<%= book._id %>?_method=PUT" method="POST" novalidate class="validated-form">
+                <div class="mb-1 row">
+                    <label class="form-label m-1 col-3" for="title">Title</label>
+                    <input class="form-control py-0 col me-5" type="text" id="title" name="book[title]" required value="<%=book.title%>">
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-1 row">
+                    <label class="form-label m-1 col-3" for="subtitle">Subtitle</label>
+                    <input class="form-control py-0 col me-5" type="text" id="subtitle" name="book[subtitle]" value="<%=book.subtitle%>">
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-1 row">
+                    <label class="form-label m-1 col-3" for="author">Author</label>
+                    <input class="form-control py-0 col me-5" type="text" id="author" name="book[author]" required value="<%=book.author%>">
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
         
-        <div class="mb-3">
-            <button class="btn btn-success">Save Edit</button>
+                <div class="mb-1 row">
+                    <label class="form-label m-1 col-3" for="genre">Genre</label>
+                    <input class="form-control py-0 col me-5" type="text" id="genre" name="book[genre]" required value="<%=book.genre%>">
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+
+                <div class="mb-1 row">
+                    <label class="form-label m-1 col-3" for="pageCount"><span>Page Count</span></label>
+                    <input class="form-control py-0 col me-5" type="text" id="pageCount" name="book[pageCount]" value="<%=book.pageCount%>" onkeypress="return isNumber(event)">
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+
+                <div class="mb-1 row ">
+                    <label class="form-label m-1 col" for="description">Description</label>
+                    <textarea rows="<%=Math.max(book.description.length/70,4) %>" class="form-control py-0 mx-0" type="text" id="description" name="book[description]" ><%=book.description%></textarea>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+        
+                
+                <div class="mb-3">
+                    <button class="btn btn-success">Save Edit</button>
+                </div>
+            </form>
+          
         </div>
-    </form>
-    <a href="/books">All Books</a>
+      </div>
+    </div>
+
+    
+
+  </div>
 </div>

@@ -2,7 +2,7 @@
 
 
 <div class="container mb-3">
-    <a href="/entries">Back to Library</a>  
+    <a class="shelfTitle"href="/entries">Back to Library</a>
 
     <div class="text-center xs-10 md-4">
 
@@ -12,6 +12,8 @@
                     <button class="btn btn-outline-success" type="">Search</button>
                 </div>
             </form>
+            
+
 
     </div>
     
@@ -75,4 +77,6 @@
         </div>
     </div>
  
-<% } %>
+<% } else {%>
+    <p class="text-center">Log your own book <a href="books/new">here</a></p>
+    <% } %>

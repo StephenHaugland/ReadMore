@@ -113,7 +113,6 @@ app.get('/', (req,res) => {
 })
 
 app.get('/home', (req,res)=>{
-
     res.render('home')
 })
 
@@ -124,14 +123,19 @@ app.get('/search', (req,res)=>{
 
 app.post('/search', async(req,res)=>{
     // console.log(req.body);
-    const results = await searchByTerm(req.body.q);
-    populate = true;
-    console.log(results);
+    try {
+        const results = await searchByTerm(req.body.q);
+        populate = true;
+        console.log(results);
+        res.render('search', {results, populate});
+    } catch(e) {
+        req.flash('error', e.message);
+        res.redirect('home')
+    }
     // const vData = await getVolumeData(results);
     // console.log(`data from array: ${vData}`);
     // const sData = await getSingleVolumeData(results.items[0]);
     // console.log(`single data:${sData}`);
-    res.render('search', {results, populate});
 })
 
 // app.get('/search/result', (req,res)=>{

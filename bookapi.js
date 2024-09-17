@@ -3,6 +3,8 @@ module.exports.searchByTerm = async (term)=>{
     const books = await searchResult.json();
     bookArray = books.items;
     return bookArray;
+
+    
 }
 
 // module.exports.getVolumeData = async (volumeArray) =>{

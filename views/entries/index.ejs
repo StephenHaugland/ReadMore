@@ -43,7 +43,7 @@
     <div class="container mx-0 px-0">
         <div class="row">
             <div class="col-xs-12 col-md-4 px-0">
-                <h3><a class="shelfTitle" href="/entries/read">Read</a> (<%= shelfSortedEntries.read.length %>)</h3>
+                <h3><a class="shelfTitle" href="/entries?shelf=read">Read</a> (<%= shelfSortedEntries.read.length %>)</h3>
                 <% for (let e of shelfSortedEntries.read) { %>
                     <div class="d-flex my-1">
                         <img src="<%=e.book.coverUrl%>" class="img-fluid  entryIndex mx-1" alt="cover">
@@ -61,8 +61,8 @@
                 <% } %>
             </div>
             <div class="col-xs-12 col-md-4 px-0">
-                <h3><a class="shelfTitle" href="entries?shelf=wanttoread">Want to Read</a> (<%= shelfSortedEntries.wantToRead.length %>)</h3>
-                <% for (let e of shelfSortedEntries.wantToRead) { %>
+                <h3><a class="shelfTitle" href="entries?shelf=wanttoread">Want to Read</a> (<%= shelfSortedEntries.wanttoread.length %>)</h3>
+                <% for (let e of shelfSortedEntries.wanttoread) { %>
                     <div class="d-flex my-1">
                         <img src="<%=e.book.coverUrl%>" class="img-fluid  entryIndex mx-1" alt="cover">
                         <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %>  <a href="entries?genre=<%=e.book.genre%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></p>

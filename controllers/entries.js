@@ -63,7 +63,7 @@ module.exports.deleteEntry = async (eID) => {
 module.exports.sortByShelf = async (entries) => {
     let read = [];
     let reading = [];
-    let wantToRead = [];
+    let wanttoread = [];
     // console.log(read)
     for (let e of entries){
         if (e.shelf === 'Read'){
@@ -71,8 +71,8 @@ module.exports.sortByShelf = async (entries) => {
         } else if(e.shelf === 'Reading') {
             reading.push(e)
         } else if(e.shelf === 'Want to Read'){
-            wantToRead.push(e);
+            wanttoread.push(e);
         }
     }
-    return {read,wantToRead,reading};
+    return {read,wanttoread,reading};
 }

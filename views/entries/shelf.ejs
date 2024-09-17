@@ -1,5 +1,10 @@
 <% layout('layouts/boilerplate')%>
 
+<% let entries = (filter==="")? shelfSortedEntries[shelf] : filteredEntries %>
+<% let shelfTitle = ''; %>
+<% if (shelf === "read") shelfTitle = "Read" %>
+<% if (shelf === "reading") shelfTitle = "Reading" %>
+<% if (shelf === "wanttoread") shelfTitle = "Want To Read" %>
 
 
 <div class="mainContainer">
@@ -7,14 +12,15 @@
         <div class="row justify-content-start">
             <div class="col-auto">
                 <a class="shelfTitle"href="/entries">Back to Library</a>
-                <h1><a class="shelfTitle" href="/entries/read">Read</a> (<%= shelfSortedEntries.read.length %>) <a class="btn btn-success" href="/search">+</a>
+                <h1><a class="shelfTitle" href="/entries?shelf=<%=shelf%>"><%=shelfTitle %></a> (<%= entries.length %>) <a class="btn btn-success" href="/search">+</a>
                 </h1>
             </div>
             <div>
-                <form class="validated-form" action="/entries/read" method="GET" novalidate>
+                <form class="validated-form" action="/entries" method="GET" novalidate>
+                    <input type="hidden" name="shelf" id="shelf" value="<%= shelf %>">
                     <div class="d-inline-flex">
                         <!-- <label for="filter">Filter by genre: </label> -->
-                        <input class="form-control" name="genre" list="genreOptions" id="filter" placeholder="Filter by genre" autocomplete="off" required>
+                        <input class="form-control" name="genre" list="genreOptions" id="filter" placeholder="<%= (filter==="")?"Filter by genre":filter %>" autocomplete="off">
                         <datalist id="genreOptions">
                             <option value="Fiction">
                             <option value="History">
@@ -38,19 +44,20 @@
               <tr>
                 <th scope="col">Cover</th>
                 <th scope="col">Title</th>
+                <!-- <th scope="col">Subtitle</th> -->
                 <th scope="col">Author</th>
                 <th scope="col">Genre</th>
                 <th scope="col">Page Count</th>
               </tr>
             </thead>
             <tbody>
-                <% let entries = (filter==="")? shelfSortedEntries.read : filteredEntries %>
+                
                 <% for (let e of entries) { %>
                     <tr>
                       <th scope="row"><img src="<%=e.book.coverUrl%>" class="img-fluid  shelfView mx-1" alt="cover"></th>
-                      <td><a href="/entries/<%=e._id%>"><%= e.book.title %></a></td>
+                      <td><a href="/entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.subtitle %></td>
                       <td><%= e.book.author %></td>
-                      <td><a href="/entries/read?genre=<%=e.book.genre%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></td>
+                      <td><a href="/entries?shelf=<%=shelf%>&genre=<%=e.book.genre%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></td>
                       <% let pages = (e.book.pageCount == null)? 'n/a':e.book.pageCount %>
                       <td> <%=pages%></td>
                     </tr>

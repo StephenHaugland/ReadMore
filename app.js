@@ -15,7 +15,7 @@ const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const {searchByTerm, getVolumeData, getSingleVolumeData} = require('./bookapi.js')
-const {storeReturnTo, isLoggedIn} = require('./middleware');
+const {storeReturnTo, isLoggedIn, matchQueryString} = require('./middleware');
 // const {getBooks, createBook} = require('./database.js');
 const {createNewBook, addBookToShelf, getUserLibrary, getBook, updateBook, deleteBook, getAllBooks} = require('./controllers/books.js')
 const {createNewEntry, getEntry, updateEntry, deleteEntry, getEntryByBook, sortByShelf} = require('./controllers/entries');
@@ -258,8 +258,8 @@ app.delete('/books/:id', async (req,res)=>{
 //////////////////////////////////////////////////////////////////
 
 
-// index page for all entries
-app.get('/entries', async (req,res)=>{
+// index page for all entries IF NO SHELF SPECIFIED
+app.get('/entries',matchQueryString, async (req,res)=>{
     let filter = "";
     const userID = res.locals.currentUser._id;
     let filteredEntries = '';
@@ -280,10 +280,35 @@ app.get('/entries', async (req,res)=>{
         shelfSortedEntries = await sortByShelf(entries);
         
     }
-    
     // console.log(shelfSortedEntries);
     console.log(`filteredentries: ${filteredEntries}`);
     res.render('entries/index', {shelfSortedEntries, filteredEntries, filter});
+})
+
+// entries route IF SHELF PARAM SPECIFIED
+app.get('/entries', async(req,res)=>{
+    let shelf = req.query.shelf;
+    console.log(`shelf: ${shelf}`)
+    let filter = "";
+    const userID = res.locals.currentUser._id;
+    let filteredEntries = '';
+    const entries = await getAllEntries(userID);
+    let shelfSortedEntries = await sortByShelf(entries);
+    if (req.query.genre){
+        filter = capitalizeString(req.query.genre);
+        console.log(`filter parameter: ${filter}`);
+        try{
+            // console.log( shelfSortedEntries[shelf])
+            filteredEntries = await getFilteredEntries(filter, shelfSortedEntries[shelf]);
+            console.log(filteredEntries);
+            
+
+        }
+        catch(e){
+            console.log(e)
+        }
+    }
+    res.render(`entries/shelf`, {shelfSortedEntries, filteredEntries, filter, shelf})
 })
 
 // render new entry form page
@@ -307,27 +332,7 @@ app.post('/entries', async(req,res)=>{
     res.redirect(`/entries/${newEntry._id}`);
 })
 
-// route to show only read books
-app.get('/entries/read', async (req,res)=>{
-    let filter = "";
-    const userID = res.locals.currentUser._id;
-    let filteredEntries = '';
-    const entries = await getAllEntries(userID);
-    let shelfSortedEntries = await sortByShelf(entries);
-    if (req.query.genre){
-        filter = capitalizeString(req.query.genre);
-        console.log(`filter parameter: ${filter}`);
-        try{
-            filteredEntries = await getFilteredEntries(filter, shelfSortedEntries.read);
-            console.log(filteredEntries);
 
-        }
-        catch(e){
-            console.log(e)
-        }
-    }
-    res.render('entries/read', {shelfSortedEntries, filteredEntries, filter})
-})
 
 // route to show entry edit page
 app.get('/entries/:id/edit', async(req,res)=>{

@@ -59,3 +59,7 @@ module.exports.validateReview = (req,res,next) => {
         next();
     }
 }
+
+module.exports.matchQueryString = function(req, res, next) {
+    return next(req.query.shelf ? 'route' : null);
+  };

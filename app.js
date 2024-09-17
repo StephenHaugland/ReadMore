@@ -116,12 +116,12 @@ app.get('/home', (req,res)=>{
     res.render('home')
 })
 
-app.get('/search', (req,res)=>{
+app.get('/search', isLoggedIn,(req,res)=>{
     let populate=false ;
     res.render('search', {populate});
 })
 
-app.post('/search', async(req,res)=>{
+app.post('/search', isLoggedIn, async(req,res)=>{
     // console.log(req.body);
     try {
         const results = await searchByTerm(req.body.q);
@@ -190,7 +190,7 @@ app.get('/logout', async (req,res)=>{
 ////////////////////////////////////////////////////////////////////////
 
 // retrieve and show all books in the db
-app.get('/books', async (req,res)=>{
+app.get('/books', isLoggedIn, async (req,res)=>{
     // NEW MONGO INDEX
     // const userID = res.locals.currentUser._id;
     const books = await getAllBooks();
@@ -208,18 +208,18 @@ app.get('/books', async (req,res)=>{
     res.render('books/index', {books});
 })
 
-app.get('/books/new', (req,res) => {
+app.get('/books/new',isLoggedIn, (req,res) => {
     res.render('books/new')
 })
 
 // retreive and show 1 book from db
-app.get('/books/:id', async(req,res)=>{
+app.get('/books/:id',isLoggedIn, async(req,res)=>{
     const book = await getBook(req.params.id);
     res.render('books/show', {book})
 })
 
 // add 1 new book
-app.post('/books', async(req,res)=>{
+app.post('/books',isLoggedIn, async(req,res)=>{
     //NEW MONGO
     // addBookToShelf(book,r)
     const {book} = req.body;
@@ -231,14 +231,14 @@ app.post('/books', async(req,res)=>{
 })
 
 // route to show book edit page
-app.get('/books/:id/edit', async(req,res)=>{
+app.get('/books/:id/edit',isLoggedIn, async(req,res)=>{
     
     const book = await getBook(req.params.id);
     res.render('books/edit', {book})
 })
 
 // post route to update book
-app.put('/books/:id', async(req,res)=>{
+app.put('/books/:id',isLoggedIn, async(req,res)=>{
     const {id} = req.params;
     const {book} = req.body;
     const updatedBook = await updateBook(book,id);
@@ -249,7 +249,7 @@ app.put('/books/:id', async(req,res)=>{
 })
 
 // delete route to remove 1 book by id
-app.delete('/books/:id', async (req,res)=>{
+app.delete('/books/:id', isLoggedIn, async (req,res)=>{
     const {id} = req.params;
     await deleteBook(id);
     req.flash('success', 'Successfully deleted book');
@@ -263,7 +263,7 @@ app.delete('/books/:id', async (req,res)=>{
 
 
 // index page for all entries IF NO SHELF SPECIFIED
-app.get('/entries',matchQueryString, async (req,res)=>{
+app.get('/entries',matchQueryString, isLoggedIn, async (req,res)=>{
     let filter = "";
     const userID = res.locals.currentUser._id;
     let filteredEntries = '';
@@ -290,7 +290,7 @@ app.get('/entries',matchQueryString, async (req,res)=>{
 })
 
 // entries route IF SHELF PARAM SPECIFIED
-app.get('/entries', async(req,res)=>{
+app.get('/entries', isLoggedIn, async(req,res)=>{
     let shelf = req.query.shelf;
     console.log(`shelf: ${shelf}`)
     let filter = "";
@@ -316,13 +316,13 @@ app.get('/entries', async(req,res)=>{
 })
 
 // render new entry form page
-app.get('/entries/new', (req,res) => {
+app.get('/entries/new', isLoggedIn,(req,res) => {
     res.render('entries/new')
 })
 
 
 // add 1 new entry to user
-app.post('/entries', async(req,res)=>{
+app.post('/entries',isLoggedIn, async(req,res)=>{
     // create new entry using data supplied from form
     const {entry} = req.body;
     // console.log(`entry from form: ${{entry}}`);
@@ -339,13 +339,13 @@ app.post('/entries', async(req,res)=>{
 
 
 // route to show entry edit page
-app.get('/entries/:id/edit', async(req,res)=>{
+app.get('/entries/:id/edit', isLoggedIn, async(req,res)=>{
     const entry = await getEntry(req.params.id);
     res.render('entries/edit', {entry})
 })
 
 // post route to update book
-app.put('/entries/:id', async(req,res)=>{
+app.put('/entries/:id',isLoggedIn, async(req,res)=>{
     const {id} = req.params;
     const {entry} = req.body;
     await updateEntry(entry,id);
@@ -353,7 +353,7 @@ app.put('/entries/:id', async(req,res)=>{
 })
 
 // retreive and show 1 entry
-app.get('/entries/:id', async(req,res)=>{
+app.get('/entries/:id',isLoggedIn, async(req,res)=>{
     const entry = await getEntry(req.params.id);
     console.log(`page count is : ${entry.book.pageCount}`)
     // const {book, shelf, notes} = entry;
@@ -362,7 +362,7 @@ app.get('/entries/:id', async(req,res)=>{
 })
 
 // delete route to remove 1 entry by id
-app.delete('/entries/:id', async (req,res)=>{
+app.delete('/entries/:id',isLoggedIn, async (req,res)=>{
     const {id} = req.params;
     const userID = res.locals.currentUser._id;
 

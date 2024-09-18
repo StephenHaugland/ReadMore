@@ -1,74 +1,68 @@
 <% layout('layouts/boilerplate')%>
+<div class="container">
+  <a class="shelfTitle"href="/entries">Back to Library</a>
 
 
-<div>
-  <div class="container">
-    <div class="row">
-      <div class="col-md">
-        <div class="card mb-3" style="max-width: 540px;">
-          <div class="row g-0">
-            <div class="col-md-4">
-              <img src="<%= book.coverUrl %>"
-               class="img-fluid rounded-start" alt="...">
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title"><%= book.title %></h5>
-              <h6> <%= book.subtitle %></h6>
-              <p class="card-text"><%= book.author %></p>
-              <p class="card-text"><small class="text-muted"><%= book.genre %></small></p>
-              <p class="card-text"> Page Count: <%= book.pageCount %></p>
-              </div>
-            </div>
+  <div class="row">
+    <div class="col-sm-2">
+      <div class="card mb-3" style="max-width: 400px;">
+        <div class="row g-0">
+          <div class="text-center">
+            <img src="<%= book.coverUrl %>" class="img-thumbnail float-start w-100" alt="book cover">
+             <div class="d-inline-flex">
+               <a class="btn btn-sm btn-dark" href="/books/<%= book._id %>/edit" role="button">Edit Book</a>
+             </div>
           </div>
+        </div>  
+      </div>
+    </div>
+    <div class="col-sm-8">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title mb-0 text-center"><%= book.title %> <span class="badge bg-secondary" id="category"><%=book.genre%></span> <br> </h4>
+          <p class="my-0 text-center"><%= book.subtitle %></p>
+          <p class="card-text text-center"> <small class="text-muted"><%= book.author %></small></p>
+          <p class="card-text description"><%= book.description %></p>
+          <% if (book.pageCount != undefined || book.pageCount != null) {%>
+            <p class="card-text text-center"><small> Page Count: <%= book.pageCount %></small></p>
+            <% } %>
         </div>
       </div>
-      <div class="col-md">
-        <h2>Reading Information</h2>
-        <form action="/entries" method="POST" novalidate class="validated-form">
-          <input type = "hidden" name = "entry[book]" value ="<%= book._id %>" />
-          <div class="mb-3">
-              <label class="form-label" for="notes">Notes about book:</label>
-              <input class="form-control" type="text" id="notes" name="entry[notes]">
-          </div>
-
-          <div class="mb-3">
-              <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" id="read" name="entry[shelf]"required value="Read"></input>
-                  <label class="form-check-label" for="read">Read</label>
-              </div>
-              
-              <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" id="Reading" name="entry[shelf]"required value="Reading"></input>
-                  <label class="form-check-label" for="Reading">Reading</label>
-              </div>
-              <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" id="WantToRead" name="entry[shelf]"required value="Want to Read"></input>
-                  <label class="form-check-label" for="WantToRead">Want to Read</label>
-              </div>
-              
-          </div>
-          
-          <div class="mb-3">
-              <button class="btn btn-success">Add book to shelf</button>
-          </div>
-      </form>
-
+      <div>
+        
       </div>
-
-
     </div>
+
+    <div class="col-sm-2 mt-2">
+      <h5>Add To Shelf</h5>
+      <form action="/entries" method="POST" novalidate class="validated-form">
+        <input type = "hidden" name = "entry[book]" value ="<%=book._id %>" />
+
+        <div class="mb-3">
+          <div class="form-check">
+              <input class="form-check-input" type="radio" id="read" name="entry[shelf]"required value="Read" >
+              <label class="form-check-label" for="read">Read</label>
+          </div>
+          <div class="form-check">
+              <input class="form-check-input" type="radio" id="Reading" name="entry[shelf]"required value="Reading" >
+              <label class="form-check-label" for="Reading">Reading</label>
+          </div>
+          <div class="form-check">
+              <input class="form-check-input" type="radio" id="WantToRead" name="entry[shelf]"required value="Want to Read">
+              <label class="form-check-label" for="WantToRead">Want to Read</label>
+          </div>
+
+          <div class="mb-3">
+            <input class="" type="hidden" id="notes" name="entry[notes]">
+        </div>
+          
+        </div>  
+        <div class="mb-3">
+            <button class="btn btn-success">Add book to shelf</button>
+        </div>
+
+      </form>
+    </div>
+
   </div>
-    
-    
-
-    <a href="/books/<%=book._id%>/edit">Edit</a>
-
-
-  <a href="/books">Back to all books</a>
-  <form action="/books/<%= book._id%>?_method=DELETE" method="POST">
-      <button>
-          Delete
-      </button>
-  </form>
 </div>

@@ -25,6 +25,14 @@ module.exports.isTemporaryBook = (req,res,next) => {
     next();
 }
 
+// module.exports.deleteOrphanBook = async(req,res,next) => {
+//     if (req.session.orphanBookID) {
+//         console.log(`delete book: ${req.session.orphanBookID}`);
+//         // await deleteBook(req.session.orphanBookID);
+//         delete req.session.orphanBookID;
+//     }
+// }
+
 module.exports.validateCampground = (req,res,next) => {
     
     const {error} = campgroundSchema.validate(req.body);

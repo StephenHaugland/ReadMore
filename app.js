@@ -96,12 +96,24 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use((req,res,next) =>{
-    console.log(req.session);
+app.use(async(req,res,next) =>{
+    // console.log(req.session);
+    // console.log(res.locals)
     // delete req.session.returnTo;
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
+
+    if (req.path == '/entries' && req.method == 'POST'){
+        // console.log('book was added to entry, remove orphan status');
+        delete req.session.orphanBookID;
+    }else {
+        if (req.session.orphanBookID) {
+            // console.log(`deleted book: ${req.session.orphanBookID}`);
+            await deleteBook(req.session.orphanBookID);
+            delete req.session.orphanBookID;
+        }
+    }
     next();
 })
 
@@ -126,8 +138,8 @@ app.get('/search', isLoggedIn,(req,res)=>{
 
 app.post('/search', storeReturnTo, isLoggedIn, async(req,res)=>{
     req.session.returnTo = req.originalUrl
-    console.log(`sessionReturnTo: ${req.session.returnTo}`);
-
+    // console.log(`sessionReturnTo: ${req.session.returnTo}`);
+    
     // console.log(req.body);
     // delete req.session.returnTo;
     try {
@@ -228,6 +240,11 @@ app.get('/books/new',isLoggedIn, (req,res) => {
 app.get('/books/:id', storeReturnTo, isLoggedIn, async(req,res)=>{
     const book = await getBook(req.params.id);
     const prevRoute = req.session.returnTo;
+    // req.local.returnTo = prevRoute;
+
+    // this book isn't being referenced to yet so temporarily store its ID in session
+    req.session.orphanBookID = req.params.id;
+
     delete req.session.returnTo;
     // req.session.returnTo = req.originalUrl;
     // const redirectUrl = res.session.returnTo || '/entries';
@@ -239,7 +256,7 @@ app.get('/books/:id', storeReturnTo, isLoggedIn, async(req,res)=>{
 // add 1 new book
 app.post('/books',storeReturnTo, isLoggedIn, async(req,res)=>{
     // req.session.returnTo = req.originalUrl;
-    console.log(`session: ${req.session}`)
+    // console.log(`session: ${req.session}`)
     //NEW MONGO
     // addBookToShelf(book,r)
     const {book} = req.body;
@@ -290,7 +307,7 @@ app.get('/entries',matchQueryString, isLoggedIn, async (req,res)=>{
     let shelfSortedEntries = '';
     if (req.query.genre){
         filter = capitalizeString(req.query.genre);
-        console.log(`filter parameter: ${filter}`);
+        // console.log(`filter parameter: ${filter}`);
         try{
             filteredEntries = await getFilteredEntries(filter, entries);
             // console.log(filteredEntries);
@@ -304,14 +321,14 @@ app.get('/entries',matchQueryString, isLoggedIn, async (req,res)=>{
         
     }
     // console.log(shelfSortedEntries);
-    console.log(`filteredentries: ${filteredEntries}`);
+    // console.log(`filteredentries: ${filteredEntries}`);
     res.render('entries/index', {shelfSortedEntries, filteredEntries, filter});
 })
 
 // entries route IF SHELF PARAM SPECIFIED
 app.get('/entries', isLoggedIn, async(req,res)=>{
     let shelf = req.query.shelf;
-    console.log(`shelf: ${shelf}`)
+    // console.log(`shelf: ${shelf}`)
     let filter = "";
     const userID = res.locals.currentUser._id;
     let filteredEntries = '';
@@ -319,11 +336,11 @@ app.get('/entries', isLoggedIn, async(req,res)=>{
     let shelfSortedEntries = await sortByShelf(entries);
     if (req.query.genre){
         filter = capitalizeString(req.query.genre);
-        console.log(`filter parameter: ${filter}`);
+        // console.log(`filter parameter: ${filter}`);
         try{
             // console.log( shelfSortedEntries[shelf])
             filteredEntries = await getFilteredEntries(filter, shelfSortedEntries[shelf]);
-            console.log(filteredEntries);
+            // console.log(filteredEntries);
             
 
         }
@@ -352,6 +369,10 @@ app.post('/entries',isLoggedIn, async(req,res)=>{
     const userID = res.locals.currentUser._id;
     await addEntry(newEntry, userID);
 
+    // since we now reference the newly created book, remove its orphan status
+    // delete req.session.orphanBookID;
+
+
     res.redirect(`/entries/${newEntry._id}`);
 })
 
@@ -374,7 +395,7 @@ app.put('/entries/:id',isLoggedIn, async(req,res)=>{
 // retreive and show 1 entry
 app.get('/entries/:id',isLoggedIn, async(req,res)=>{
     const entry = await getEntry(req.params.id);
-    console.log(`page count is : ${entry.book.pageCount}`)
+    // console.log(`page count is : ${entry.book.pageCount}`)
     // const {book, shelf, notes} = entry;
     // console.log(`book cover img: ${entry.book.coverUrl}`)
     res.render('entries/show', {entry})

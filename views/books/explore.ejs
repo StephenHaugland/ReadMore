@@ -1,0 +1,52 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="container mb-3">
+    <a class="shelfTitle"href="/entries">Back to Library</a>
+    
+</div>
+<h1>Explore</h1>
+
+<div class="container text-center">
+    <p>Check out what other users are reading! <a href="/explore">Refresh</a> to see more</p>
+</div>
+
+<div class="container">
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-2">
+            <% for (let b of randCollection) { %>
+                <div class="card mb-1 p-1">
+                <div class="col">
+                        <div class="row">
+                                <img src="<%= b.coverUrl%>" id="exploreCover"class="img-fluid rounded mx-auto" alt="book cover">
+                        </div>
+                        <div class="row">
+                            <div class="card-body mx-1 py-1 px-2">
+                            <h6 class="card-title text-center mb-0"><%= b.title %> </h6>
+                            <div class="text-center">
+                                <span class="badge bg-secondary text-center" id="category"><%=b.genre%></span>
+                            </div>
+                            <p class="card-text text-center mt-0 mb-1"><small class="text-muted">by <%= b.author %></small></p>
+                                <form action="/books" method="POST" novalidate class="validated-form">
+                                    <input type = "hidden" name = "book[title]" value ="<%= b.title %>" />
+                                    <input type = "hidden" name = "book[subtitle]" value ="<%= b.subtitle %>" />
+                                    <input type = "hidden" name = "book[coverUrl]" value ="<%= b.coverUrl %>" />
+                                    <input type = "hidden" name = "book[author]" value ="<%= b.author %>" />
+                                    <input type = "hidden" name = "book[genre]" value ="<%= b.genre %>" /> 
+                                    <input type = "hidden" name = "book[description]" value ="<%= b.description %>" /> 
+                                    <input type = "hidden" name = "book[pageCount]" value ="<%= b.pageCount %>" /> 
+                    
+                    
+                                    <div class="d-flex justify-content-center mb-1">
+                                        <button class="btn btn-sm btn-success px-3 align-bottom">View Book</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            <%} %>
+    </div>
+    
+</div>
+

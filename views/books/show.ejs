@@ -1,7 +1,14 @@
 <% layout('layouts/boilerplate')%>
-<div class="container">
-  <a class="shelfTitle"href="/entries">Back to Library</a>
 
+
+<div class="container">
+  <!-- IF CUSTOM BOOK IS BEING MADE AND BACK BUTTON CLICKED -->
+   <% let backText = ''; %>
+   <% if(prevRoute=="/search") {backText = 'to search'} else if (prevRoute=="/books/new") {backText = 'to new book'} %>
+  <p class="shelfTitle link col-2 d-inline-flex" onclick="history.back()">Back <%=backText%></p>
+
+  <!-- delete book on book/new and /search if prev link == book/show  -->
+   
 
   <div class="row">
     <div class="col-sm-2">

@@ -1,6 +1,6 @@
 a.shelfTitle {
-    text-decoration: none;
-    color: #212529;
+    text-decoration: none !important;
+    color: #212529 !important;
 }
 
   
@@ -42,6 +42,6 @@ img.shelfView {
     
 }
 
-tr td {
-   }
+p.link { cursor: pointer !important; }
+
 

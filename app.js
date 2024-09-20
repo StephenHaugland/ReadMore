@@ -15,12 +15,13 @@ const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const {searchByTerm, getVolumeData, getSingleVolumeData} = require('./bookapi.js')
-const {storeReturnTo, isLoggedIn, matchQueryString} = require('./middleware');
+const {storeReturnTo, isLoggedIn, matchQueryString, isTemporaryBook} = require('./middleware');
 // const {getBooks, createBook} = require('./database.js');
 const {createNewBook, addBookToShelf, getUserLibrary, getBook, updateBook, deleteBook, getAllBooks} = require('./controllers/books.js')
 const {createNewEntry, getEntry, updateEntry, deleteEntry, getEntryByBook, sortByShelf} = require('./controllers/entries');
 const {addEntry, getAllEntries, removeEntry, getFilteredEntries} = require('./controllers/users');
 const {capitalizeString} = require('./utils/capitalizeString.js');
+const _ = require('underscore');
 
 
 const mongoSanitize = require('express-mongo-sanitize');
@@ -96,6 +97,8 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req,res,next) =>{
+    console.log(req.session);
+    // delete req.session.returnTo;
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
@@ -121,17 +124,22 @@ app.get('/search', isLoggedIn,(req,res)=>{
     res.render('search', {populate});
 })
 
-app.post('/search', isLoggedIn, async(req,res)=>{
+app.post('/search', storeReturnTo, isLoggedIn, async(req,res)=>{
+    req.session.returnTo = req.originalUrl
+    console.log(`sessionReturnTo: ${req.session.returnTo}`);
+
     // console.log(req.body);
+    // delete req.session.returnTo;
     try {
         const results = await searchByTerm(req.body.q);
         populate = true;
-        console.log(results);
+        // console.log(results);
         res.render('search', {results, populate});
     } catch(e) {
         req.flash('error', e.message);
         res.redirect('home')
     }
+
     // const vData = await getVolumeData(results);
     // console.log(`data from array: ${vData}`);
     // const sData = await getSingleVolumeData(results.items[0]);
@@ -190,11 +198,13 @@ app.get('/logout', async (req,res)=>{
 ////////////////////////////////////////////////////////////////////////
 
 // retrieve and show all books in the db
-app.get('/books', isLoggedIn, async (req,res)=>{
+app.get('/explore', isLoggedIn, async (req,res)=>{
     // NEW MONGO INDEX
     // const userID = res.locals.currentUser._id;
     const books = await getAllBooks();
-
+    // pick n random books from all books in DB
+    let randCollection = _.sample(books,25);
+    // console.log(randCollection)
 
     // const shelves = await getUserLibrary(userID);
     // console.log(shelves);
@@ -205,28 +215,38 @@ app.get('/books', isLoggedIn, async (req,res)=>{
     // query sql server for books
     // const books = await getBooks();
     // console.log(books);
-    res.render('books/index', {books});
+    res.render('books/explore', {randCollection});
 })
 
 app.get('/books/new',isLoggedIn, (req,res) => {
+    req.session.returnTo = req.originalUrl;
+
     res.render('books/new')
 })
 
 // retreive and show 1 book from db
-app.get('/books/:id',isLoggedIn, async(req,res)=>{
+app.get('/books/:id', storeReturnTo, isLoggedIn, async(req,res)=>{
     const book = await getBook(req.params.id);
-    res.render('books/show', {book})
+    const prevRoute = req.session.returnTo;
+    delete req.session.returnTo;
+    // req.session.returnTo = req.originalUrl;
+    // const redirectUrl = res.session.returnTo || '/entries';
+
+    // console.log(redirectUrl);
+    res.render('books/show', {book,prevRoute})
 })
 
 // add 1 new book
-app.post('/books',isLoggedIn, async(req,res)=>{
+app.post('/books',storeReturnTo, isLoggedIn, async(req,res)=>{
+    // req.session.returnTo = req.originalUrl;
+    console.log(`session: ${req.session}`)
     //NEW MONGO
     // addBookToShelf(book,r)
     const {book} = req.body;
     // const userID = res.locals.currentUser._id;
     const newBook = await createNewBook(book);
     // await addBookToShelf(newBook, userID, shelf);
-    
+    // console.log(res.locals.returnTo)
     res.redirect(`/books/${newBook._id}`);
 })
 
@@ -243,8 +263,7 @@ app.put('/books/:id',isLoggedIn, async(req,res)=>{
     const {book} = req.body;
     const updatedBook = await updateBook(book,id);
     const updatedEntry = await getEntryByBook(id);
-    const redirectUrl = `/entries/${updatedEntry._id}` || '/books/${id}';
-    // delete req.session.returnTo;
+    const redirectUrl = (updatedEntry==null)?`/books/${id}`:`/entries/${updatedEntry._id}`;
     res.redirect(redirectUrl)
 })
 

@@ -19,6 +19,12 @@ module.exports.storeReturnTo = (req, res, next) => {
     next();
 }
 
+module.exports.isTemporaryBook = (req,res,next) => {
+    req.session.returnTo = req.originalUrl;
+    console.log(req.session);
+    next();
+}
+
 module.exports.validateCampground = (req,res,next) => {
     
     const {error} = campgroundSchema.validate(req.body);

@@ -25,6 +25,14 @@ module.exports.isTemporaryBook = (req,res,next) => {
     next();
 }
 
+module.exports.isEntryOwner = (req,res,next) => {
+        if (!req.user.entries.includes(req.params.id)){
+        req.flash('error', 'Entry Not Found')
+        return res.redirect('/entries');
+    }
+    next();
+}
+
 // module.exports.deleteOrphanBook = async(req,res,next) => {
 //     if (req.session.orphanBookID) {
 //         console.log(`delete book: ${req.session.orphanBookID}`);

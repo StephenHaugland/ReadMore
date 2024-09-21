@@ -15,7 +15,7 @@ const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const {searchByTerm, getVolumeData, getSingleVolumeData} = require('./bookapi.js')
-const {storeReturnTo, isLoggedIn, matchQueryString, isTemporaryBook} = require('./middleware');
+const {storeReturnTo, isLoggedIn, matchQueryString, isTemporaryBook,isEntryOwner} = require('./middleware');
 // const {getBooks, createBook} = require('./database.js');
 const {createNewBook, addBookToShelf, getUserLibrary, getBook, updateBook, deleteBook, getAllBooks} = require('./controllers/books.js')
 const {createNewEntry, getEntry, updateEntry, deleteEntry, getEntryByBook, sortByShelf} = require('./controllers/entries');
@@ -101,6 +101,7 @@ app.use(async(req,res,next) =>{
     // console.log(res.locals)
     // delete req.session.returnTo;
     res.locals.currentUser = req.user;
+    // console.log(req.user);
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
 
@@ -265,6 +266,8 @@ app.post('/books',storeReturnTo, isLoggedIn, async(req,res)=>{
     // await addBookToShelf(newBook, userID, shelf);
     // console.log(res.locals.returnTo)
     res.redirect(`/books/${newBook._id}`);
+
+    
 })
 
 // route to show book edit page
@@ -275,13 +278,14 @@ app.get('/books/:id/edit',isLoggedIn, async(req,res)=>{
 })
 
 // post route to update book
-app.put('/books/:id',isLoggedIn, async(req,res)=>{
-    const {id} = req.params;
-    const {book} = req.body;
-    const updatedBook = await updateBook(book,id);
-    const updatedEntry = await getEntryByBook(id);
-    const redirectUrl = (updatedEntry==null)?`/books/${id}`:`/entries/${updatedEntry._id}`;
-    res.redirect(redirectUrl)
+app.put('/books/:id',isLoggedIn, async(req,res)=>{ 
+        const {id} = req.params;
+        const {book} = req.body;
+        const updatedBook = await updateBook(book,id);
+        const updatedEntry = await getEntryByBook(id);
+        const redirectUrl = (updatedEntry==null)?`/books/${id}`:`/entries/${updatedEntry._id}`;
+        req.flash('success', "Successfully updated book details");
+        res.redirect(redirectUrl);
 })
 
 // delete route to remove 1 book by id
@@ -369,9 +373,7 @@ app.post('/entries',isLoggedIn, async(req,res)=>{
     const userID = res.locals.currentUser._id;
     await addEntry(newEntry, userID);
 
-    // since we now reference the newly created book, remove its orphan status
-    // delete req.session.orphanBookID;
-
+    req.flash('success', "Successfully added book to library");
 
     res.redirect(`/entries/${newEntry._id}`);
 })
@@ -379,21 +381,22 @@ app.post('/entries',isLoggedIn, async(req,res)=>{
 
 
 // route to show entry edit page
-app.get('/entries/:id/edit', isLoggedIn, async(req,res)=>{
+app.get('/entries/:id/edit', isLoggedIn, isEntryOwner, async(req,res)=>{
     const entry = await getEntry(req.params.id);
     res.render('entries/edit', {entry})
 })
 
 // post route to update book
-app.put('/entries/:id',isLoggedIn, async(req,res)=>{
+app.put('/entries/:id',isLoggedIn, isEntryOwner, async(req,res)=>{
     const {id} = req.params;
     const {entry} = req.body;
     await updateEntry(entry,id);
+    req.flash('success', "Successfully updated entry details");
     res.redirect(`/entries/${id}`);
 })
 
 // retreive and show 1 entry
-app.get('/entries/:id',isLoggedIn, async(req,res)=>{
+app.get('/entries/:id',isLoggedIn, isEntryOwner, async(req,res)=>{
     const entry = await getEntry(req.params.id);
     // console.log(`page count is : ${entry.book.pageCount}`)
     // const {book, shelf, notes} = entry;
@@ -402,14 +405,14 @@ app.get('/entries/:id',isLoggedIn, async(req,res)=>{
 })
 
 // delete route to remove 1 entry by id
-app.delete('/entries/:id',isLoggedIn, async (req,res)=>{
+app.delete('/entries/:id',isLoggedIn, isEntryOwner, async (req,res)=>{
     const {id} = req.params;
     const userID = res.locals.currentUser._id;
 
     await removeEntry(id, userID);
 
     await deleteEntry(id);
-    req.flash('success', 'Successfully deleted book');
+    req.flash('success', 'Successfully removed book from library');
 
     res.redirect('/entries');
 })

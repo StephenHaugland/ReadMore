@@ -1,6 +1,8 @@
 const express = require('express');
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
+const {capitalizeString} = require('../utils/capitalizeString.js');
+
 const Book = require('../models/book');
 const User = require('../models/user');
 
@@ -22,7 +24,7 @@ router.get('/new',isLoggedIn, (req,res) => {
 // retreive and show 1 book from db
 router.get('/:id', isValidBook, storeReturnTo, isLoggedIn, async(req,res)=>{
     const book = await getBook(req.params.id);
-    console.log(`book object: ${book}`);
+    // console.log(`book object: ${book}`);
     const prevRoute = req.session.returnTo;
     // this book isn't being referenced to yet so temporarily store its ID in session
     req.session.orphanBookID = req.params.id;
@@ -37,10 +39,11 @@ router.post('/',storeReturnTo, isLoggedIn, async(req,res)=>{
     //NEW MONGO
     // addBookToShelf(book,r)
     const {book} = req.body;
+    let caseCorrectedGenre = capitalizeString(book.genre);
+    // console.log(caseCorrectedGenre);
+    book.genre = caseCorrectedGenre;
     // const userID = res.locals.currentUser._id;
     const newBook = await createNewBook(book);
-    // await addBookToShelf(newBook, userID, shelf);
-    // console.log(res.locals.returnTo)
     res.redirect(`/books/${newBook._id}`);
 
     

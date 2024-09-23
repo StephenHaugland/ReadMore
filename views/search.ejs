@@ -59,7 +59,6 @@
                           <div class="col-8 col-lg-9">
                             <div class="card-body mx-1 px-0">
                               <h5 class="card-title text-center mb-0"><%= b.volumeInfo.title %> <span class="badge bg-secondary" id="category"><%=b.volumeInfo.categories%></span></h5>
-                              <!-- <h6 class="card-subtitle text-muted text-center"><%= b.volumeInfo.subtitle %></h6> -->
                               <p class="card-text text-center mt-0 mb-1"><small class="text-muted">by <%= b.volumeInfo.authors %></small></p>
                               <% let shortDescription = '' %>
                               <%try {if (b.volumeInfo.description.length>200) {shortDescription =b.volumeInfo.description.substring(0,200)+"..."} else {shortDescription = b.volumeInfo.description} } catch(e) { shortDescription ="No description available"}%>

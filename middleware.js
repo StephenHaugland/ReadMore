@@ -1,6 +1,7 @@
 const {campgroundSchema} = require('./schemas.js');
 const ExpressError = require('./utils/ExpressError.js');
 const Book = require('./models/book');
+const { getBook } = require('./controllers/books.js');
 
 module.exports.isLoggedIn = (req,res,next) =>{
     if(!req.isAuthenticated()){
@@ -15,6 +16,15 @@ module.exports.isLoggedIn = (req,res,next) =>{
 module.exports.storeReturnTo = (req, res, next) => {
     if (req.session.returnTo) {
         res.locals.returnTo = req.session.returnTo;
+    }
+    next();
+}
+
+module.exports.isValidBook = async(req,res,next)=>{
+    const book = await getBook(req.params.id);
+    if (book == null){
+        req.flash('error', 'Book not found!');
+        return res.redirect('/entries');
     }
     next();
 }

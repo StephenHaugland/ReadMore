@@ -29,9 +29,9 @@ const mongoSanitize = require('express-mongo-sanitize');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
-
-
 const Book = require('./models/book');
+
+const books = require('./routes/books');
 
 const MongoDBStore = require('connect-mongo')(session);
 
@@ -231,71 +231,8 @@ app.get('/explore', isLoggedIn, async (req,res)=>{
     res.render('books/explore', {randCollection});
 })
 
-app.get('/books/new',isLoggedIn, (req,res) => {
-    req.session.returnTo = req.originalUrl;
 
-    res.render('books/new')
-})
-
-// retreive and show 1 book from db
-app.get('/books/:id', storeReturnTo, isLoggedIn, async(req,res)=>{
-    const book = await getBook(req.params.id);
-    const prevRoute = req.session.returnTo;
-    // req.local.returnTo = prevRoute;
-
-    // this book isn't being referenced to yet so temporarily store its ID in session
-    req.session.orphanBookID = req.params.id;
-
-    delete req.session.returnTo;
-    // req.session.returnTo = req.originalUrl;
-    // const redirectUrl = res.session.returnTo || '/entries';
-
-    // console.log(redirectUrl);
-    res.render('books/show', {book,prevRoute})
-})
-
-// add 1 new book
-app.post('/books',storeReturnTo, isLoggedIn, async(req,res)=>{
-    // req.session.returnTo = req.originalUrl;
-    // console.log(`session: ${req.session}`)
-    //NEW MONGO
-    // addBookToShelf(book,r)
-    const {book} = req.body;
-    // const userID = res.locals.currentUser._id;
-    const newBook = await createNewBook(book);
-    // await addBookToShelf(newBook, userID, shelf);
-    // console.log(res.locals.returnTo)
-    res.redirect(`/books/${newBook._id}`);
-
-    
-})
-
-// route to show book edit page
-app.get('/books/:id/edit',isLoggedIn, async(req,res)=>{
-    
-    const book = await getBook(req.params.id);
-    res.render('books/edit', {book})
-})
-
-// post route to update book
-app.put('/books/:id',isLoggedIn, async(req,res)=>{ 
-        const {id} = req.params;
-        const {book} = req.body;
-        const updatedBook = await updateBook(book,id);
-        const updatedEntry = await getEntryByBook(id);
-        const redirectUrl = (updatedEntry==null)?`/books/${id}`:`/entries/${updatedEntry._id}`;
-        req.flash('success', "Successfully updated book details");
-        res.redirect(redirectUrl);
-})
-
-// delete route to remove 1 book by id
-app.delete('/books/:id', isLoggedIn, async (req,res)=>{
-    const {id} = req.params;
-    await deleteBook(id);
-    req.flash('success', 'Successfully deleted book');
-
-    res.redirect('/books');
-})
+app.use('/books', books);
 
 //////////////////////////////////////////////////////////////////
 // entry routes

@@ -1,4 +1,4 @@
-const {campgroundSchema} = require('./schemas.js');
+const {bookSchema,entrySchema} = require('./schemas.js');
 const ExpressError = require('./utils/ExpressError.js');
 const Book = require('./models/book');
 const { getBook } = require('./controllers/books.js');
@@ -51,9 +51,9 @@ module.exports.isEntryOwner = (req,res,next) => {
 //     }
 // }
 
-module.exports.validateCampground = (req,res,next) => {
+module.exports.validateBook = (req,res,next) => {
     
-    const {error} = campgroundSchema.validate(req.body);
+    const {error} = bookSchema.validate(req.body);
     if(error){
         const msg = error.details.map(el => el.message).join(',');
         throw new ExpressError(msg, 400)
@@ -61,6 +61,18 @@ module.exports.validateCampground = (req,res,next) => {
         next();
     }
 }
+
+module.exports.validateEntry = (req,res,next) => {
+    
+    const {error} = entrySchema.validate(req.body);
+    if(error){
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
 
 module.exports.isAuthor = async (req,res,next) =>{
     const {id} = req.params;

@@ -31,6 +31,8 @@
       <div>
         <form action="/entries/<%=entry._id%>?_method=PUT" method="POST" novalidate class="validated-form">
           <input type = "hidden" name = "entry[book]" value ="<%= entry.book._id %>" />
+          <input type="hidden" name="entry[shelf]" value="<%=entry.shelf%>" />
+
           <div class="">
             <label for="notes" class="form-label mt-2 mb-0">Notes</label>
             <textarea class="form-control" id="notes" name="entry[notes]" rows="<%=Math.max(entry.notes.length/70,4) %>"><%= entry.notes %></textarea>
@@ -46,6 +48,7 @@
       <h5>Current Shelf</h5>
       <form action="/entries/<%=entry._id%>?_method=PUT" method="POST" novalidate class="validated-form">
         <input type = "hidden" name = "entry[book]" value ="<%= entry.book._id %>" />
+        <input type="hidden" name="entry[notes]" value="<%=entry.notes%>" />
 
         <div class="mb-3">
           <div class="form-check">

@@ -40,7 +40,7 @@
                                             <input type = "hidden" name = "book[subtitle]" value ="<%= b.volumeInfo.subtitle %>" />
                                             <input type = "hidden" name = "book[coverUrl]" value ="<%= thumbnail %>" />
                                             <input type = "hidden" name = "book[author]" value ="<%= b.volumeInfo.authors %>" />
-                                            <input type = "hidden" name = "book[genre]" value ="<%= b.volumeInfo.categories %>" /> 
+                                            <input type = "hidden" name = "book[genre]" value ="<%= (b.volumeInfo.categories)?b.volumeInfo.categories: "n/a" %>" /> 
                                             <input type = "hidden" name = "book[description]" value ="<%= b.volumeInfo.description %>" /> 
                                             <input type = "hidden" name = "book[pageCount]" value ="<%= b.volumeInfo.pageCount %>" /> 
 
@@ -58,7 +58,7 @@
                           </div>
                           <div class="col-8 col-lg-9">
                             <div class="card-body mx-1 px-0">
-                              <h5 class="card-title text-center mb-0"><%= b.volumeInfo.title %> <span class="badge bg-secondary" id="category"><%=b.volumeInfo.categories%></span></h5>
+                              <h5 class="card-title text-center mb-0"><%= b.volumeInfo.title %> <span class="badge bg-secondary" id="category"><%= (b.volumeInfo.categories)?b.volumeInfo.categories: "n/a" %></span></h5>
                               <p class="card-text text-center mt-0 mb-1"><small class="text-muted">by <%= b.volumeInfo.authors %></small></p>
                               <% let shortDescription = '' %>
                               <%try {if (b.volumeInfo.description.length>200) {shortDescription =b.volumeInfo.description.substring(0,200)+"..."} else {shortDescription = b.volumeInfo.description} } catch(e) { shortDescription ="No description available"}%>

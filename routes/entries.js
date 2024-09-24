@@ -7,7 +7,7 @@ const User = require('../models/user');
 
 const {capitalizeString} = require('../utils/capitalizeString.js');
 
-const {storeReturnTo, isLoggedIn, matchQueryString, isTemporaryBook, isValidBook,isEntryOwner} = require('../middleware');
+const {storeReturnTo, isLoggedIn, matchQueryString, isTemporaryBook, isValidBook,isEntryOwner,validateEntry} = require('../middleware');
 const {createNewEntry, getEntry, updateEntry, deleteEntry, getEntryByBook, sortByShelf} = require('../controllers/entries');
 const {addEntry, getAllEntries, removeEntry, getFilteredEntries} = require('../controllers/users');
 
@@ -74,7 +74,7 @@ router.get('/new', isLoggedIn,(req,res) => {
 
 
 // add 1 new entry to user
-router.post('/',isLoggedIn, catchAsync(async(req,res)=>{
+router.post('/',isLoggedIn, validateEntry, catchAsync(async(req,res)=>{
     // create new entry using data supplied from form
     const {entry} = req.body;
     // console.log(`entry from form: ${{entry}}`);
@@ -99,7 +99,7 @@ router.get('/:id/edit', isLoggedIn, isEntryOwner, catchAsync(async(req,res)=>{
 }))
 
 // post route to update book
-router.put('/:id',isLoggedIn, isEntryOwner, catchAsync(async(req,res)=>{
+router.put('/:id',isLoggedIn, isEntryOwner, validateEntry, catchAsync(async(req,res)=>{
     const {id} = req.params;
     const {entry} = req.body;
     await updateEntry(entry,id);

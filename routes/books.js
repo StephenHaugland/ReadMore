@@ -6,7 +6,7 @@ const {capitalizeString} = require('../utils/capitalizeString.js');
 const Book = require('../models/book');
 const User = require('../models/user');
 
-const {storeReturnTo, isLoggedIn, matchQueryString, isTemporaryBook, isValidBook} = require('../middleware');
+const {storeReturnTo, isLoggedIn, matchQueryString, isTemporaryBook, isValidBook, validateBook} = require('../middleware');
 const {createNewBook, getBook, updateBook, deleteBook, getAllBooks} = require('../controllers/books.js')
 const {getEntryByBook} = require('../controllers/entries');
 
@@ -37,7 +37,7 @@ router.get('/:id', storeReturnTo, isLoggedIn, catchAsync(async(req,res)=>{
 }))
 
 // add 1 new book
-router.post('/',storeReturnTo, isLoggedIn, catchAsync(async(req,res)=>{
+router.post('/',storeReturnTo, isLoggedIn, validateBook, catchAsync(async(req,res)=>{
     // req.session.returnTo = req.originalUrl;
     // console.log(`session: ${req.session}`)
     //NEW MONGO
@@ -68,7 +68,7 @@ router.get('/:id/edit',isLoggedIn, catchAsync(async(req,res)=>{
 }))
 
 // post route to update book
-router.put('/:id', isLoggedIn, catchAsync(async(req,res)=>{ 
+router.put('/:id', isLoggedIn, validateBook, catchAsync(async(req,res)=>{ 
         const {id} = req.params;
         const {book} = req.body;
         const updatedBook = await updateBook(book,id);

@@ -1,4 +1,6 @@
 module.exports.capitalizeString = (str) => {
-    str = str.toLowerCase();
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    console.log(str)
+    let lowerCase = str.toLowerCase();
+    console.log(lowerCase)
+    return lowerCase.charAt(0).toUpperCase() + lowerCase.slice(1);
 }

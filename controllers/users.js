@@ -17,7 +17,7 @@ module.exports.removeEntry = async (eID, uID) => {
 module.exports.getFilteredEntries = (filter, entries) => {
     // filter = filter.toLowerCase();
 
-    console.log(entries);
+    // console.log(entries);
     // const lowercaseGenre = allEntries
     const filteredEntries = [];
     for (let i =0; i<entries.length; i++){
@@ -29,7 +29,7 @@ module.exports.getFilteredEntries = (filter, entries) => {
 
 
     
-    console.log(filteredEntries);
+    // console.log(filteredEntries);
     return filteredEntries;
 }
 

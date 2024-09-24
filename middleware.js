@@ -31,7 +31,7 @@ module.exports.isValidBook = async(req,res,next)=>{
 
 module.exports.isTemporaryBook = (req,res,next) => {
     req.session.returnTo = req.originalUrl;
-    console.log(req.session);
+    // console.log(req.session);
     next();
 }
 

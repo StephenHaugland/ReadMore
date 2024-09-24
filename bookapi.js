@@ -4,7 +4,6 @@ module.exports.searchByTerm = async (term)=>{
     bookArray = books.items;
     return bookArray;
 
-    
 }
 
 // module.exports.getVolumeData = async (volumeArray) =>{

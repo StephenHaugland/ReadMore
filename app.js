@@ -16,7 +16,6 @@ const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const {searchByTerm, getVolumeData, getSingleVolumeData} = require('./bookapi.js')
 const {storeReturnTo, isLoggedIn, matchQueryString, isTemporaryBook,isEntryOwner} = require('./middleware');
-// const {getBooks, createBook} = require('./database.js');
 const {createNewBook, addBookToShelf, getUserLibrary, getBook, updateBook, deleteBook, getAllBooks} = require('./controllers/books.js')
 const {createNewEntry, getEntry, updateEntry, deleteEntry, getEntryByBook, sortByShelf} = require('./controllers/entries');
 const {addEntry, getAllEntries, removeEntry, getFilteredEntries} = require('./controllers/users');
@@ -33,6 +32,7 @@ const Book = require('./models/book');
 
 const books = require('./routes/books');
 const entries = require('./routes/entries');
+const users = require('./routes/users');
 
 const MongoDBStore = require('connect-mongo')(session);
 
@@ -164,48 +164,7 @@ app.post('/search', storeReturnTo, isLoggedIn, async(req,res)=>{
 //     res.render('search/result', {books});
 // })
 
-app.get('/register', async(req,res)=>{
-    res.render('users/register')
-})
-
-app.post('/register', async(req,res)=>{
-    try{
-        const {email,username,password} = req.body;
-        const user = new User({email,username});
-        const registeredUser = await User.register(user,password);
-        req.login(registeredUser, err=> {
-            if(err) return next(err);
-            req.flash('success', "Welcome to ReadMore!");
-            res.redirect('/entries');
-        })
-    } catch(e) {
-        req.flash('error', e.message);
-        res.redirect('register')
-    }
-})
-
-app.get('/login', async(req,res)=>{
-    res.render('users/login');
-})
-
-app.post('/login', storeReturnTo, passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), async(req,res)=>{
-    req.flash('success', 'Welcome Back!');
-    const redirectUrl = res.locals.returnTo || '/entries';
-    // delete req.session.returnTo;
-    res.redirect(redirectUrl);
-
-})
-
-app.get('/logout', async (req,res)=>{
-    req.logout(function (err) {
-        if(err){
-            return next(err);
-        }
-    });
-    req.flash('success', 'Goodbye!');
-    res.redirect('/');
-})
-
+app.use('/',users);
 
 ////////////////////////////////////////////////////////////////////////
 // Book Routes

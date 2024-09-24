@@ -17,7 +17,7 @@ const router = express.Router();
 
 
 // index page for all entries IF NO SHELF SPECIFIED
-router.get('/',matchQueryString, isLoggedIn, async (req,res)=>{
+router.get('/',matchQueryString, isLoggedIn, catchAsync(async (req,res)=>{
     let filter = "";
     const userID = res.locals.currentUser._id;
     let filteredEntries = '';
@@ -25,15 +25,13 @@ router.get('/',matchQueryString, isLoggedIn, async (req,res)=>{
     let shelfSortedEntries = '';
     if (req.query.genre){
         filter = capitalizeString(req.query.genre);
-        // console.log(`filter parameter: ${filter}`);
-        try{
+        console.log(`filter parameter: ${filter}`);
+        
             filteredEntries = await getFilteredEntries(filter, entries);
             // console.log(filteredEntries);
             shelfSortedEntries = await sortByShelf(filteredEntries);
-        }
-        catch(e){
-            console.log(e)
-        }
+        
+        
     } else {
         shelfSortedEntries = await sortByShelf(entries);
         
@@ -41,10 +39,10 @@ router.get('/',matchQueryString, isLoggedIn, async (req,res)=>{
     // console.log(shelfSortedEntries);
     // console.log(`filteredentries: ${filteredEntries}`);
     res.render('entries/index', {shelfSortedEntries, filteredEntries, filter});
-})
+}))
 
 // entries route IF SHELF PARAM SPECIFIED
-router.get('/', isLoggedIn, async(req,res)=>{
+router.get('/', isLoggedIn, catchAsync(async(req,res)=>{
     let shelf = req.query.shelf;
     // console.log(`shelf: ${shelf}`)
     let filter = "";
@@ -67,7 +65,7 @@ router.get('/', isLoggedIn, async(req,res)=>{
         }
     }
     res.render(`entries/shelf`, {shelfSortedEntries, filteredEntries, filter, shelf})
-})
+}))
 
 // render new entry form page
 router.get('/new', isLoggedIn,(req,res) => {
@@ -76,7 +74,7 @@ router.get('/new', isLoggedIn,(req,res) => {
 
 
 // add 1 new entry to user
-router.post('/',isLoggedIn, async(req,res)=>{
+router.post('/',isLoggedIn, catchAsync(async(req,res)=>{
     // create new entry using data supplied from form
     const {entry} = req.body;
     // console.log(`entry from form: ${{entry}}`);
@@ -90,36 +88,36 @@ router.post('/',isLoggedIn, async(req,res)=>{
     req.flash('success', "Successfully added book to library");
 
     res.redirect(`/entries/${newEntry._id}`);
-})
+}))
 
 
 
 // route to show entry edit page
-router.get('/:id/edit', isLoggedIn, isEntryOwner, async(req,res)=>{
+router.get('/:id/edit', isLoggedIn, isEntryOwner, catchAsync(async(req,res)=>{
     const entry = await getEntry(req.params.id);
     res.render('entries/edit', {entry})
-})
+}))
 
 // post route to update book
-router.put('/:id',isLoggedIn, isEntryOwner, async(req,res)=>{
+router.put('/:id',isLoggedIn, isEntryOwner, catchAsync(async(req,res)=>{
     const {id} = req.params;
     const {entry} = req.body;
     await updateEntry(entry,id);
     req.flash('success', "Successfully updated entry details");
     res.redirect(`/entries/${id}`);
-})
+}))
 
 // retreive and show 1 entry
-router.get('/:id',isLoggedIn, isEntryOwner, async(req,res)=>{
+router.get('/:id',isLoggedIn, isEntryOwner, catchAsync(async(req,res)=>{
     const entry = await getEntry(req.params.id);
     // console.log(`page count is : ${entry.book.pageCount}`)
     // const {book, shelf, notes} = entry;
     // console.log(`book cover img: ${entry.book.coverUrl}`)
     res.render('entries/show', {entry})
-})
+}))
 
 // delete route to remove 1 entry by id
-router.delete('/:id',isLoggedIn, isEntryOwner, async (req,res)=>{
+router.delete('/:id',isLoggedIn, isEntryOwner, catchAsync(async (req,res)=>{
     const {id} = req.params;
     const userID = res.locals.currentUser._id;
 
@@ -129,7 +127,7 @@ router.delete('/:id',isLoggedIn, isEntryOwner, async (req,res)=>{
     req.flash('success', 'Successfully removed book from library');
 
     res.redirect('/entries');
-})
+}))
 
 
 

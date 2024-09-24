@@ -21,7 +21,7 @@
         <form class="validated-form" action="/entries" method="GET" novalidate>
             <div class="d-inline-flex">
                 <!-- <label for="filter">Filter by genre: </label> -->
-                <input class="form-control" name="genre" list="genreOptions" id="filter" placeholder="<%= (filter==="")?"Filter by genre":filter %>" autocomplete="off">
+                <input class="form-control" name="filter" list="genreOptions" id="filter" placeholder="<%= (filter==="")?"Filter by genre":filter %>" autocomplete="off">
                 <datalist id="genreOptions">
                     <option value="Fiction">
                     <option value="History">

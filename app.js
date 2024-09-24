@@ -14,7 +14,6 @@ const Joi = require('joi');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
-const {searchByTerm, getVolumeData, getSingleVolumeData} = require('./bookapi.js')
 const {storeReturnTo, isLoggedIn, matchQueryString, isTemporaryBook,isEntryOwner} = require('./middleware');
 const {createNewBook, addBookToShelf, getUserLibrary, getBook, updateBook, deleteBook, getAllBooks} = require('./controllers/books.js')
 const {createNewEntry, getEntry, updateEntry, deleteEntry, getEntryByBook, sortByShelf} = require('./controllers/entries');
@@ -119,8 +118,9 @@ app.use(async(req,res,next) =>{
     next();
 })
 
-
-
+app.use('/',users);
+app.use('/books', books);
+app.use('/entries', entries); 
 
 app.get('/', (req,res) => {
     if(!req.isAuthenticated()){
@@ -133,76 +133,7 @@ app.get('/home', (req,res)=>{
     res.render('home')
 })
 
-app.get('/search', isLoggedIn,(req,res)=>{
-    let populate=false ;
-    res.render('search', {populate});
-})
 
-app.post('/search', storeReturnTo, isLoggedIn, async(req,res)=>{
-    req.session.returnTo = req.originalUrl
-    // console.log(`sessionReturnTo: ${req.session.returnTo}`);
-    
-    // console.log(req.body);
-    // delete req.session.returnTo;
-    try {
-        const results = await searchByTerm(req.body.q);
-        populate = true;
-        // console.log(results);
-        res.render('search', {results, populate});
-    } catch(e) {
-        req.flash('error', e.message);
-        res.redirect('home')
-    }
-
-    // const vData = await getVolumeData(results);
-    // console.log(`data from array: ${vData}`);
-    // const sData = await getSingleVolumeData(results.items[0]);
-    // console.log(`single data:${sData}`);
-})
-
-// app.get('/search/result', (req,res)=>{
-//     res.render('search/result', {books});
-// })
-
-app.use('/',users);
-
-////////////////////////////////////////////////////////////////////////
-// Book Routes
-////////////////////////////////////////////////////////////////////////
-
-// retrieve and show all books in the db
-app.get('/explore', isLoggedIn, async (req,res)=>{
-    // NEW MONGO INDEX
-    // const userID = res.locals.currentUser._id;
-    const books = await getAllBooks();
-    // pick n random books from all books in DB
-    let randCollection = _.sample(books,25);
-    // console.log(randCollection)
-
-    // const shelves = await getUserLibrary(userID);
-    // console.log(shelves);
-    // const {read} = shelves;
-    // console.log(read)
-    
-    // LEGACY SQL, DELETE LATER
-    // query sql server for books
-    // const books = await getBooks();
-    // console.log(books);
-    res.render('books/explore', {randCollection});
-})
-
-
-app.use('/books', books);
-
-//////////////////////////////////////////////////////////////////
-// entry routes
-//////////////////////////////////////////////////////////////////
-
-app.use('/entries', entries); 
-
-
-
-/////////////////////////////////////////////////////////////////////
 
 
 app.all('*', (req,res,next)=>{

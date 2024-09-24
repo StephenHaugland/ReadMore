@@ -6,6 +6,8 @@ const {capitalizeString} = require('../utils/capitalizeString.js');
 const Book = require('../models/book');
 const User = require('../models/user');
 
+const {searchByTerm, getVolumeData, getSingleVolumeData} = require('../bookapi.js')
+
 const {storeReturnTo, isLoggedIn, matchQueryString, isTemporaryBook, isValidBook, validateBook} = require('../middleware');
 const {createNewBook, getBook, updateBook, deleteBook, getAllBooks} = require('../controllers/books.js')
 const {getEntryByBook} = require('../controllers/entries');
@@ -15,6 +17,39 @@ const {getEntryByBook} = require('../controllers/entries');
 
 const router = express.Router();
 
+
+router.get('/search', isLoggedIn,(req,res)=>{
+    let populate=false ;
+    res.render('search', {populate});
+})
+
+router.post('/search', storeReturnTo, isLoggedIn, catchAsync(async(req,res)=>{
+    req.session.returnTo = req.originalUrl
+
+    const results = await searchByTerm(req.body.q);
+    if (!results){
+        req.flash('error','Cannot find that book!');
+        return res.redirect('/entries');
+    }
+    populate = true;
+    res.render('search', {results, populate});
+
+}))
+
+// retrieve and show all books in the db
+router.get('/explore', isLoggedIn, catchAsync(async (req,res)=>{
+    // const userID = res.locals.currentUser._id;
+    const books = await getAllBooks();
+    if (!books){
+        req.flash('error','Cannot find that book!');
+        return res.redirect('/entries');
+    }
+    // pick n random books from all books in DB
+    let randCollection = _.sample(books,25);
+    // console.log(randCollection)
+
+    res.render('books/explore', {randCollection});
+}))
 
 router.get('/new',isLoggedIn, (req,res) => {
     req.session.returnTo = req.originalUrl;

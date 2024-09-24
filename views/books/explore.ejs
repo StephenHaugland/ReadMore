@@ -22,7 +22,7 @@
                             <div class="card-body mx-1 py-1 px-2">
                             <h6 class="card-title text-center mb-0"><%= b.title %> </h6>
                             <div class="text-center">
-                                <span class="badge bg-secondary text-center" id="category"><%=b.genre%></span>
+                                <span class="badge bg-secondary text-center" id="category"><%= (b.genre)?b.genre: "n/a" %></span>
                             </div>
                             <p class="card-text text-center mt-0 mb-1"><small class="text-muted">by <%= b.author %></small></p>
                                 <form action="/books" method="POST" novalidate class="validated-form">
@@ -30,7 +30,7 @@
                                     <input type = "hidden" name = "book[subtitle]" value ="<%= b.subtitle %>" />
                                     <input type = "hidden" name = "book[coverUrl]" value ="<%= b.coverUrl %>" />
                                     <input type = "hidden" name = "book[author]" value ="<%= b.author %>" />
-                                    <input type = "hidden" name = "book[genre]" value ="<%= b.genre %>" /> 
+                                    <input type = "hidden" name = "book[genre]" value ="<%= (b.genre)?b.genre: "n/a" %>" /> 
                                     <input type = "hidden" name = "book[description]" value ="<%= b.description %>" /> 
                                     <input type = "hidden" name = "book[pageCount]" value ="<%= b.pageCount %>" /> 
                     

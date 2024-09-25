@@ -19,7 +19,6 @@ const {createNewBook, addBookToShelf, getUserLibrary, getBook, updateBook, delet
 const {createNewEntry, getEntry, updateEntry, deleteEntry, getEntryByBook, sortByShelf} = require('./controllers/entries');
 const {addEntry, getAllEntries, removeEntry, getFilteredEntries} = require('./controllers/users');
 const {capitalizeString} = require('./utils/capitalizeString.js');
-const _ = require('underscore');
 
 
 const mongoSanitize = require('express-mongo-sanitize');

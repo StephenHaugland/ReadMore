@@ -1,8 +1,71 @@
 const Book = require('../models/book');
 const User = require('../models/user');
 const Entry = require('../models/entry');
+const {addEntry, getAllEntries, removeEntry, getFilteredEntries} = require('../controllers/users');
+const {capitalizeString} = require('../utils/capitalizeString.js');
 
 
+
+
+module.exports.index = async (req,res)=>{
+    let filter = "";
+    const userID = res.locals.currentUser._id;
+    let filteredEntries = '';
+    const entries = await getAllEntries(userID);
+    let shelfSortedEntries = '';
+    if (req.query.genre){
+        filter = capitalizeString(req.query.genre);
+        console.log(`filter parameter: ${filter}`);
+            filteredEntries = await getFilteredEntries(filter, entries);
+            shelfSortedEntries = await this.sortByShelf(filteredEntries);
+    } else {
+        shelfSortedEntries = await this.sortByShelf(entries);
+        
+    }
+    res.render('entries/index', {shelfSortedEntries, filteredEntries, filter});
+}
+
+module.exports.shelfIndex = async(req,res)=>{
+    let shelf = req.query.shelf;
+    let filter = "";
+    const userID = res.locals.currentUser._id;
+    let filteredEntries = '';
+    const entries = await getAllEntries(userID);
+    let shelfSortedEntries = await this.sortByShelf(entries);
+    if (req.query.genre){
+        filter = capitalizeString(req.query.genre);
+        // console.log(`filter parameter: ${filter}`);
+        try{
+            // console.log( shelfSortedEntries[shelf])
+            filteredEntries = await getFilteredEntries(filter, shelfSortedEntries[shelf]);
+            // console.log(filteredEntries);
+            
+
+        }
+        catch(e){
+            console.log(e)
+        }
+    }
+    res.render(`entries/shelf`, {shelfSortedEntries, filteredEntries, filter, shelf})
+}
+
+
+module.exports.renderNewForm = (req,res) => {
+    res.render('entries/new');
+}
+
+module.exports.createEntry = async(req,res)=>{
+    // create new entry using data supplied from form
+    const {entry} = req.body;
+    // const newEntry = await createNewEntry(entry);
+    const newEntry = new Entry(entry);
+    await newEntry.save();    
+    // add newly created entry to user profile
+    const userID = res.locals.currentUser._id;
+    await addEntry(newEntry, userID);
+    req.flash('success', "Successfully added book to library");
+    res.redirect(`/entries/${newEntry._id}`);
+}
 
 // module.exports.addBookToShelf = async (book,uID, shelf) =>{
 //     const targetShelf = "shelves." + shelf;
@@ -33,10 +96,31 @@ module.exports.getEntryByBook = async (bID) => {
     return entry;
 }
 
-module.exports.updateEntry = async (entry, eID) => {
-    const updatedEntry = await Entry.findByIdAndUpdate(eID,{...entry});
+module.exports.updateEntry = async(req,res)=>{
+    const {id} = req.params;
+    const {entry} = req.body;
+    // await updateEntry(entry,id);
+    const updatedEntry = await Entry.findByIdAndUpdate(id,{...entry});
     await updatedEntry.save();
+
+    req.flash('success', "Successfully updated entry details");
+    res.redirect(`/entries/${id}`);
 }
+
+
+module.exports.renderEdit = async(req,res)=>{
+    const entry = await this.getEntry(req.params.id);
+    res.render('entries/edit', {entry})
+}
+
+module.exports.showEntry = async(req,res)=>{
+    const entry = await this.getEntry(req.params.id);
+    res.render('entries/show', {entry})
+}
+// module.exports.updateEntry = async (entry, eID) => {
+//     const updatedEntry = await Entry.findByIdAndUpdate(eID,{...entry});
+//     await updatedEntry.save();
+// }
 
 // module.exports.updateBook = async (book,bID,uID, shelf) => {
 //     //update book info
@@ -56,8 +140,18 @@ module.exports.updateEntry = async (entry, eID) => {
 //     return updatedBook;
 // }
 
-module.exports.deleteEntry = async (eID) => {
-    await Entry.findOneAndDelete({_id:eID});
+// module.exports.deleteEntry = async (eID) => {
+//     await Entry.findOneAndDelete({_id:eID});
+// }
+
+module.exports.deleteEntry = async (req,res)=>{
+    const {id} = req.params;
+    const userID = res.locals.currentUser._id;
+    await removeEntry(id, userID);
+    // await deleteEntry(id);
+    await Entry.findOneAndDelete({_id:id});
+    req.flash('success', 'Successfully removed book from library');
+    res.redirect('/entries');
 }
 
 module.exports.sortByShelf = async (entries) => {

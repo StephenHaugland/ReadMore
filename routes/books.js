@@ -1,129 +1,41 @@
 const express = require('express');
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
-const {capitalizeString} = require('../utils/capitalizeString.js');
 
 const Book = require('../models/book');
 const User = require('../models/user');
 
-const {searchByTerm, getVolumeData, getSingleVolumeData} = require('../bookapi.js')
 
 const {storeReturnTo, isLoggedIn, matchQueryString, isTemporaryBook, isValidBook, validateBook} = require('../middleware');
-const {createNewBook, getBook, updateBook, deleteBook, getAllBooks} = require('../controllers/books.js')
+const {createNewBook, getBook, updateBook, deleteBook, getAllBooks, renderSearch} = require('../controllers/books.js')
 const {getEntryByBook} = require('../controllers/entries');
-
-
-
+const books = require('../controllers/books')
 
 const router = express.Router();
 
 
-router.get('/search', isLoggedIn,(req,res)=>{
-    let populate=false ;
-    res.render('search', {populate});
-})
+router.get('/search', isLoggedIn, books.renderSearch)
 
-router.post('/search', storeReturnTo, isLoggedIn, catchAsync(async(req,res)=>{
-    req.session.returnTo = req.originalUrl
-
-    const results = await searchByTerm(req.body.q);
-    if (!results){
-        req.flash('error','Cannot find that book!');
-        return res.redirect('/entries');
-    }
-    populate = true;
-    res.render('search', {results, populate});
-
-}))
+router.post('/search', storeReturnTo, isLoggedIn, catchAsync(books.search))
 
 // retrieve and show all books in the db
-router.get('/explore', isLoggedIn, catchAsync(async (req,res)=>{
-    // const userID = res.locals.currentUser._id;
-    const books = await getAllBooks();
-    if (!books){
-        req.flash('error','Cannot find that book!');
-        return res.redirect('/entries');
-    }
-    // pick n random books from all books in DB
-    let randCollection = _.sample(books,25);
-    // console.log(randCollection)
+router.get('/explore', isLoggedIn, catchAsync(books.renderExplore))
 
-    res.render('books/explore', {randCollection});
-}))
-
-router.get('/new',isLoggedIn, (req,res) => {
-    req.session.returnTo = req.originalUrl;
-    res.render('books/new')
-})
+router.get('/new',isLoggedIn, books.renderNewForm)
 
 // retreive and show 1 book from db
-router.get('/:id', storeReturnTo, isLoggedIn, catchAsync(async(req,res)=>{
-    const book = await getBook(req.params.id);
-    if (!book){
-        req.flash('error','Cannot find that book!');
-        return res.redirect('/entries');
-    }
-    // console.log(`book object: ${book}`);
-    const prevRoute = req.session.returnTo;
-    // this book isn't being referenced to yet so temporarily store its ID in session
-    req.session.orphanBookID = req.params.id;
-    delete req.session.returnTo;
-    res.render('books/show', {book,prevRoute})
-}))
+router.get('/:id', storeReturnTo, isLoggedIn, catchAsync(books.showBook))
 
 // add 1 new book
-router.post('/',storeReturnTo, isLoggedIn, validateBook, catchAsync(async(req,res)=>{
-    // req.session.returnTo = req.originalUrl;
-    // console.log(`session: ${req.session}`)
-    //NEW MONGO
-    // addBookToShelf(book,r)
-    const {book} = req.body;
-    if (!book){
-        req.flash('error','Error creating that book!');
-        return res.redirect('/entries');
-    }
-    let caseCorrectedGenre = capitalizeString(book.genre);
-    // console.log(caseCorrectedGenre);
-    book.genre = caseCorrectedGenre;
-    // const userID = res.locals.currentUser._id;
-    const newBook = await createNewBook(book);
-    res.redirect(`/books/${newBook._id}`);
-}))
+router.post('/',storeReturnTo, isLoggedIn, validateBook, catchAsync(books.createBook))
 
 // route to show book edit page
-router.get('/:id/edit',isLoggedIn, catchAsync(async(req,res)=>{
-    
-    const book = await getBook(req.params.id);
-    if (!book){
-        req.flash('error','Cannot find that book!');
-        return res.redirect('/entries');
-    }
-    // console.log(`cover url = ${book.coverUrl}`);
-    res.render('books/edit', {book})
-}))
+router.get('/:id/edit',isLoggedIn, catchAsync(books.renderEditForm))
 
 // post route to update book
-router.put('/:id', isLoggedIn, validateBook, catchAsync(async(req,res)=>{ 
-        const {id} = req.params;
-        const {book} = req.body;
-        const updatedBook = await updateBook(book,id);
-        if (!updatedBook || !book){
-            req.flash('error','Cannot find that book!');
-            return res.redirect('/entries');
-        }
-        const updatedEntry = await getEntryByBook(id);
-        const redirectUrl = (updatedEntry==null)?`/books/${id}`:`/entries/${updatedEntry._id}`;
-        req.flash('success', "Successfully updated book details");
-        res.redirect(redirectUrl);
-}))
+router.put('/:id', isLoggedIn, validateBook, catchAsync(books.updateBook))
 
 // delete route to remove 1 book by id
-router.delete('/:id', isLoggedIn, catchAsync(async (req,res)=>{
-    const {id} = req.params;
-    await deleteBook(id);
-    req.flash('success', 'Successfully deleted book');
-
-    res.redirect('/books');
-}))
+router.delete('/:id', isLoggedIn, catchAsync(books.deleteBook))
 
 module.exports = router;

@@ -10,15 +10,9 @@ const ejsMate = require('ejs-mate');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const flash = require('connect-flash');
-const Joi = require('joi');
-const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
-const {storeReturnTo, isLoggedIn, matchQueryString, isTemporaryBook,isEntryOwner} = require('./middleware');
-const {createNewBook, addBookToShelf, getUserLibrary, getBook, updateBook, deleteBook, getAllBooks} = require('./controllers/books.js')
-const {createNewEntry, getEntry, updateEntry, deleteEntry, getEntryByBook, sortByShelf} = require('./controllers/entries');
-const {addEntry, getAllEntries, removeEntry, getFilteredEntries} = require('./controllers/users');
-const {capitalizeString} = require('./utils/capitalizeString.js');
+const {deleteOrphanBook} = require('./controllers/books.js')
 
 
 const mongoSanitize = require('express-mongo-sanitize');
@@ -26,8 +20,6 @@ const mongoSanitize = require('express-mongo-sanitize');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
-const Book = require('./models/book');
-
 const books = require('./routes/books');
 const entries = require('./routes/entries');
 const users = require('./routes/users');
@@ -110,7 +102,7 @@ app.use(async(req,res,next) =>{
     }else {
         if (req.session.orphanBookID) {
             // console.log(`deleted book: ${req.session.orphanBookID}`);
-            await deleteBook(req.session.orphanBookID);
+            await deleteOrphanBook(req.session.orphanBookID);
             delete req.session.orphanBookID;
         }
     }

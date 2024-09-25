@@ -1,11 +1,10 @@
 const Book = require('../models/book');
-const User = require('../models/user');
 const Entry = require('../models/entry');
 const _ = require('underscore');
 const {capitalizeString} = require('../utils/capitalizeString.js');
 
 
-const {searchByTerm, getVolumeData, getSingleVolumeData} = require('../bookapi.js')
+const {searchByTerm} = require('../bookapi.js')
 
 
 module.exports.renderSearch = (req,res)=>{
@@ -121,14 +120,14 @@ module.exports.updateBook = async(req,res)=>{
 //     return updatedBook;
 // }
 
-// module.exports.deleteBook = async (bID) => {
-//     await Book.findByIdAndDelete(bID);
-// }
+module.exports.deleteOrphanBook = async (bID) => {
+    await Book.findByIdAndDelete(bID);
+}
 
 module.exports.deleteBook = async (req,res)=>{
     const {id} = req.params;
     await Book.findByIdAndDelete(id);
     req.flash('success', 'Successfully deleted book');
 
-    res.redirect('/books');
+    res.redirect('/entries');
 }

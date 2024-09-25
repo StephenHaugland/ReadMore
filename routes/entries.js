@@ -1,18 +1,7 @@
 const express = require('express');
 const catchAsync = require('../utils/catchAsync');
-const ExpressError = require('../utils/ExpressError');
-const Book = require('../models/book');
-const User = require('../models/user');
-
-
-const {capitalizeString} = require('../utils/capitalizeString.js');
-
-const {storeReturnTo, isLoggedIn, matchQueryString, isTemporaryBook, isValidBook,isEntryOwner,validateEntry} = require('../middleware');
-const {createNewEntry, getEntry, updateEntry, deleteEntry, getEntryByBook, sortByShelf} = require('../controllers/entries');
-const {addEntry, getAllEntries, removeEntry, getFilteredEntries} = require('../controllers/users');
+const {isLoggedIn, matchQueryString,isEntryOwner,validateEntry} = require('../middleware');
 const entries = require('../controllers/entries.js')
-
-
 const router = express.Router();
 
 

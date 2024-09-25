@@ -1,5 +1,3 @@
-const Book = require('../models/book');
-const User = require('../models/user');
 const Entry = require('../models/entry');
 const {addEntry, getAllEntries, removeEntry, getFilteredEntries} = require('../controllers/users');
 const {capitalizeString} = require('../utils/capitalizeString.js');

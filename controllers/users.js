@@ -1,5 +1,3 @@
-const Book = require('../models/book');
-const Entry = require('../models/entry');
 const User = require('../models/user');
 
 

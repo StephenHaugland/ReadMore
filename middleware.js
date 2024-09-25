@@ -52,7 +52,6 @@ module.exports.isEntryOwner = (req,res,next) => {
 // }
 
 module.exports.validateBook = (req,res,next) => {
-    
     const {error} = bookSchema.validate(req.body);
     if(error){
         const msg = error.details.map(el => el.message).join(',');
@@ -63,7 +62,6 @@ module.exports.validateBook = (req,res,next) => {
 }
 
 module.exports.validateEntry = (req,res,next) => {
-    
     const {error} = entrySchema.validate(req.body);
     if(error){
         const msg = error.details.map(el => el.message).join(',');
@@ -74,35 +72,35 @@ module.exports.validateEntry = (req,res,next) => {
 }
 
 
-module.exports.isAuthor = async (req,res,next) =>{
-    const {id} = req.params;
-    const campground = await Campground.findById(id);
-    if (!campground.author.equals(req.user._id)) {
-        req.flash('error','You do not have permission to do that!');
-        return res.redirect(`/campgrounds/${id}`);
-    }
-    next();
-}
+// module.exports.isAuthor = async (req,res,next) =>{
+//     const {id} = req.params;
+//     const campground = await Campground.findById(id);
+//     if (!campground.author.equals(req.user._id)) {
+//         req.flash('error','You do not have permission to do that!');
+//         return res.redirect(`/campgrounds/${id}`);
+//     }
+//     next();
+// }
 
-module.exports.isReviewAuthor = async (req,res,next) =>{
-    const {id, reviewId} = req.params;
-    const review = await Review.findById(reviewId);
-    if (!review.author.equals(req.user._id)) {
-        req.flash('error','You do not have permission to do that!');
-        return res.redirect(`/campgrounds/${id}`);
-    }
-    next();
-}
+// module.exports.isReviewAuthor = async (req,res,next) =>{
+//     const {id, reviewId} = req.params;
+//     const review = await Review.findById(reviewId);
+//     if (!review.author.equals(req.user._id)) {
+//         req.flash('error','You do not have permission to do that!');
+//         return res.redirect(`/campgrounds/${id}`);
+//     }
+//     next();
+// }
 
-module.exports.validateReview = (req,res,next) => {
-    const {error} = reviewSchema.validate(req.body);
-    if (error){
-        const msg = error.details.map(el=>el.message).join(',');
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
+// module.exports.validateReview = (req,res,next) => {
+//     const {error} = reviewSchema.validate(req.body);
+//     if (error){
+//         const msg = error.details.map(el=>el.message).join(',');
+//         throw new ExpressError(msg, 400)
+//     } else {
+//         next();
+//     }
+// }
 
 module.exports.matchQueryString = function(req, res, next) {
     return next(req.query.shelf ? 'route' : null);

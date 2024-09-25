@@ -55,15 +55,21 @@ module.exports.removeEntry = async (eID, uID) => {
 
 module.exports.getFilteredEntries = (filter, entries) => {
     // filter = filter.toLowerCase();
-
-    // console.log(entries);
+    function escapeRegExp(stringToGoIntoTheRegex) {
+        return stringToGoIntoTheRegex.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    }
+    let filterEscaped = escapeRegExp(filter);
+    const regex = new RegExp("\\b" + filterEscaped + "\\b", "mi");
+    console.log(regex);
     // const lowercaseGenre = allEntries
     const filteredEntries = [];
     for (let i =0; i<entries.length; i++){
-        if (entries[i].book.genre.includes(filter)){
+        let genre = entries[i].book.genre[0];
+        console.log(regex.test(genre));
+        console.log(entries[i].book.genre)
+        if (regex.test(genre)){
             filteredEntries.push(entries[i]);
         }
-        console.log(entries[i].book.genre)
     }
 
 

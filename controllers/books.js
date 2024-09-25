@@ -67,6 +67,7 @@ module.exports.showBook = async(req,res)=>{
 
 module.exports.createBook = async(req,res)=>{
     const {book} = req.body;
+
     if (!book){
         req.flash('error','Error creating that book!');
         return res.redirect('/entries');
@@ -74,6 +75,7 @@ module.exports.createBook = async(req,res)=>{
     let caseCorrectedGenre = capitalizeString(book.genre);
     // console.log(caseCorrectedGenre);
     book.genre = caseCorrectedGenre;
+    // book.genre.replace('%20&%20', ' %26 ');
     // const userID = res.locals.currentUser._id;
     const newBook = new Book(book);
     await newBook.save();

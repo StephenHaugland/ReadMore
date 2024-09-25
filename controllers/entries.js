@@ -32,13 +32,8 @@ module.exports.shelfIndex = async(req,res)=>{
     let shelfSortedEntries = await this.sortByShelf(entries);
     if (req.query.genre){
         filter = capitalizeString(req.query.genre);
-        // console.log(`filter parameter: ${filter}`);
         try{
-            // console.log( shelfSortedEntries[shelf])
-            filteredEntries = await getFilteredEntries(filter, shelfSortedEntries[shelf]);
-            // console.log(filteredEntries);
-            
-
+            filteredEntries = await getFilteredEntries(filter, shelfSortedEntries[shelf]);        
         }
         catch(e){
             console.log(e)

@@ -28,7 +28,7 @@ const users = require('./routes/users');
 const MongoDBStore = require('connect-mongo')(session);
 
 
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/read-more';
+const dbUrl = process.env.DB_URL;
 // const dbUrl = 'mongodb://localhost:27017/read-more'
 // console.log(dbUrl);
 mongoose.connect(dbUrl);
@@ -52,7 +52,8 @@ app.use(mongoSanitize());
 app.use(helmet());
 // app.use(express.json());
 
-const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
+// const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
+const secret = process.env.SECRET;
 
 
 const store = new MongoDBStore({
@@ -71,6 +72,7 @@ const sessionConfig = {
     secret,
     resave: false,
     saveUninitialized: true,
+    proxy: true,
     cookie: {
         httpOnly: true,
         secure: true,

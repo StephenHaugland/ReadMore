@@ -4,7 +4,7 @@
 <div class="container">
    <% let backText = ''; %>
    <% if(prevRoute=="/search") {backText = 'to search'} else if (prevRoute=="/books/new") {backText = 'to new book'} %>
-  <p class="shelfTitle link col-2 d-inline-flex" onclick="history.back()">Back <%=backText%></p>
+  <p class="shelfTitle link col-2 d-inline-flex" id="backButton">Back <%=backText%></p>
    
 
   <div class="row">
@@ -61,9 +61,7 @@
         </div>
           
         </div>  
-        <div class="mb-3">
-            <button class="btn btn-success">Add book to shelf</button>
-        </div>
+        
 
       </form>
     </div>

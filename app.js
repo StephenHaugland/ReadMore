@@ -14,6 +14,7 @@ const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const {deleteOrphanBook} = require('./controllers/books.js')
 
+const helmet = require('helmet');
 
 const mongoSanitize = require('express-mongo-sanitize');
 
@@ -27,10 +28,10 @@ const users = require('./routes/users');
 const MongoDBStore = require('connect-mongo')(session);
 
 
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/read-more';
-
+// const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/read-more';
+const dbUrl = 'mongodb://localhost:27017/read-more'
 // console.log(dbUrl);
-mongoose.connect('mongodb://localhost:27017/read-more');
+mongoose.connect(dbUrl);
 
 
 const db = mongoose.connection;
@@ -48,6 +49,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(mongoSanitize());
+app.use(helmet());
 // app.use(express.json());
 
 const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
@@ -79,10 +81,47 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
+const scriptSrcUrls = [
+    "https://stackpath.bootstrapcdn.com/",
+    "https://kit.fontawesome.com/",
+    "https://cdnjs.cloudflare.com/",
+    "https://cdn.jsdelivr.net",
+];
+const styleSrcUrls = [
+    "https://kit-free.fontawesome.com/",
+    "https://stackpath.bootstrapcdn.com/",
+    "https://cdn.jsdelivr.net",
+    "https://fonts.googleapis.com/",
+    "https://use.fontawesome.com/",
+];
+const connectSrcUrls = [
+    
+];
+const fontSrcUrls = [];
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: [],
+            connectSrc: ["'self'", ...connectSrcUrls],
+            scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+            workerSrc: ["'self'", "blob:"],
+            objectSrc: [],
+            imgSrc: [
+                "'self'",
+                "blob:",
+                "data:",
+                "http://books.google.com/books/content",
+                "https://external-content.duckduckgo.com/"
+            ],
+            fontSrc: ["'self'", ...fontSrcUrls],
+        },
+    })
+);
+
+
 app.use(passport.initialize());
 app.use(passport.session());
-
-
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());

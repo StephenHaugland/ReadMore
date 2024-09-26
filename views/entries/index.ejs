@@ -47,7 +47,7 @@
                 <% for (let e of shelfSortedEntries.read) { %>
                     <div class="d-flex my-1">
                         <img src="<%=e.book.coverUrl%>" class="img-fluid  entryIndex mx-1" alt="cover">
-                        <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <a href="entries?genre=<%=e.book.genre%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></p>
+                        <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <a href="entries?genre=<%=encodeURIComponent(e.book.genre)%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></p>
                     </div>
                 <% } %>
             </div>
@@ -56,7 +56,7 @@
                 <% for (let e of shelfSortedEntries.reading) { %>
                     <div class="d-flex my-1">
                         <img src="<%=e.book.coverUrl%>" class="img-fluid  entryIndex mx-1" alt="cover">
-                        <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <a href="entries?genre=<%=e.book.genre%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></p>
+                        <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %> <a href="entries?genre=<%=encodeURIComponent(e.book.genre)%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></p>
                     </div>
                 <% } %>
             </div>
@@ -65,7 +65,7 @@
                 <% for (let e of shelfSortedEntries.wanttoread) { %>
                     <div class="d-flex my-1">
                         <img src="<%=e.book.coverUrl%>" class="img-fluid  entryIndex mx-1" alt="cover">
-                        <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %>  <a href="entries?genre=<%=e.book.genre%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></p>
+                        <p class="my-1"><a href="entries/<%=e._id%>"><%= e.book.title %></a> - <%= e.book.author %>  <a href="entries?genre=<%=encodeURIComponent(e.book.genre)%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></p>
                     </div>
                 <% } %>
             </div>

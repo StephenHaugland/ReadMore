@@ -13,9 +13,12 @@ module.exports.index = async (req,res)=>{
     let shelfSortedEntries = '';
     if (req.query.genre){
         filter = capitalizeString(req.query.genre);
-        console.log(`filter parameter: ${filter}`);
-            filteredEntries = await getFilteredEntries(filter, entries);
-            shelfSortedEntries = await this.sortByShelf(filteredEntries);
+        // console.log(`filter parameter: ${filter}`);
+        let decodedFilter = decodeURIComponent(filter);
+        // console.log(`decodedFilter:${decodedFilter}`);
+
+        filteredEntries = await getFilteredEntries(filter, entries);
+        shelfSortedEntries = await this.sortByShelf(filteredEntries);
     } else {
         shelfSortedEntries = await this.sortByShelf(entries);
         
@@ -25,6 +28,10 @@ module.exports.index = async (req,res)=>{
 
 module.exports.shelfIndex = async(req,res)=>{
     let shelf = req.query.shelf;
+    if (shelf != 'read' && shelf != 'reading' && shelf != 'wanttoread' ){
+        req.flash('error','Cannot find that shelf!');
+        return res.redirect('/entries');
+    }
     let filter = "";
     const userID = res.locals.currentUser._id;
     let filteredEntries = '';

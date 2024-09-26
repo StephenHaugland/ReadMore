@@ -60,13 +60,13 @@ module.exports.getFilteredEntries = (filter, entries) => {
     }
     let filterEscaped = escapeRegExp(filter);
     const regex = new RegExp("\\b" + filterEscaped + "\\b", "mi");
-    console.log(regex);
+    // console.log(regex);
     // const lowercaseGenre = allEntries
     const filteredEntries = [];
     for (let i =0; i<entries.length; i++){
         let genre = entries[i].book.genre[0];
-        console.log(regex.test(genre));
-        console.log(entries[i].book.genre)
+        // console.log(regex.test(genre));
+        // console.log(entries[i].book.genre)
         if (regex.test(genre)){
             filteredEntries.push(entries[i]);
         }

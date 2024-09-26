@@ -28,8 +28,8 @@ const users = require('./routes/users');
 const MongoDBStore = require('connect-mongo')(session);
 
 
-// const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/read-more';
-const dbUrl = 'mongodb://localhost:27017/read-more'
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/read-more';
+// const dbUrl = 'mongodb://localhost:27017/read-more'
 // console.log(dbUrl);
 mongoose.connect(dbUrl);
 
@@ -73,7 +73,7 @@ const sessionConfig = {
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
-        // secure: true,
+        secure: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7
     }

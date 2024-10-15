@@ -62,7 +62,9 @@
                               <p class="card-text text-center mt-0 mb-1"><small class="text-muted">by <%= b.volumeInfo.authors %></small></p>
                               <% let shortDescription = '' %>
                               <% let shorterDescription = '' %>
-                              <%try {if (b.volumeInfo.description.length>200) {shortDescription =b.volumeInfo.description.substring(0,200)+"...";shorterDescription = shortDescription.substring(0,150)+"...";} else {shortDescription = b.volumeInfo.description; shorterDescription=shortDescription;} } catch(e) { shortDescription ="No description available"; shorterDescription = shortDescription;}%>
+                              <%try {if (b.volumeInfo.description.length>200) {shortDescription =b.volumeInfo.description.substring(0,200)+"..."} else {shortDescription = b.volumeInfo.description} } catch(e) { shortDescription ="No description available"}%>
+                              <%try {if (b.volumeInfo.description.length>130) {shorterDescription =b.volumeInfo.description.substring(0,130)+"..."} else {shorterDescription = b.volumeInfo.description} } catch(e) { shorterDescription ="No description available"}%>
+
                               <p class="card-text mx-2 d-none d-sm-block"><span style="display:inline-block; width: 20px;"></span><%= shortDescription %></p>
                               <p class="card-text mx-2 d-block d-sm-none"><span style="display:inline-block; width: 20px;"></span><%= shorterDescription %></p>
 

@@ -22,7 +22,7 @@
     </div>
 
     <div class="container px-0">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5">
+        <div class="row row-cols-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-3">
                 <% for (let b of results) { %>
                     <div class="card mb-2">
                         <div class="row g-0">
@@ -61,9 +61,12 @@
                               <h5 class="card-title text-center mb-0"><%= b.volumeInfo.title %> <span class="badge bg-secondary" id="category"><%= (b.volumeInfo.categories)?b.volumeInfo.categories: "n/a" %></span></h5>
                               <p class="card-text text-center mt-0 mb-1"><small class="text-muted">by <%= b.volumeInfo.authors %></small></p>
                               <% let shortDescription = '' %>
-                              <%try {if (b.volumeInfo.description.length>200) {shortDescription =b.volumeInfo.description.substring(0,200)+"..."} else {shortDescription = b.volumeInfo.description} } catch(e) { shortDescription ="No description available"}%>
+                              <% let shorterDescription = '' %>
+                              <%try {if (b.volumeInfo.description.length>200) {shortDescription =b.volumeInfo.description.substring(0,200)+"...";shorterDescription = shortDescription.substring(0,150)+"...";} else {shortDescription = b.volumeInfo.description; shorterDescription=shortDescription;} } catch(e) { shortDescription ="No description available"; shorterDescription = shortDescription;}%>
                               <p class="card-text mx-2 d-none d-sm-block"><span style="display:inline-block; width: 20px;"></span><%= shortDescription %></p>
-                              <p class="card-text mx-2 text-center"> <small>Page Count: <%= b.volumeInfo.pageCount %> </small></p>
+                              <p class="card-text mx-2 d-block d-sm-none"><span style="display:inline-block; width: 20px;"></span><%= shorterDescription %></p>
+
+                              <p class="card-text mx-2 text-center d-none d-sm-block"> <small>Page Count: <%= b.volumeInfo.pageCount %> </small></p>
                             </div>
                           </div>
                         </div>

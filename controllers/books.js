@@ -1,6 +1,5 @@
 const Book = require('../models/book');
 const Entry = require('../models/entry');
-const _ = require('underscore');
 const {capitalizeString} = require('../utils/capitalizeString.js');
 
 
@@ -26,17 +25,18 @@ module.exports.search = async(req,res)=>{
 }
 
 module.exports.renderExplore = async (req,res)=>{
-    // const userID = res.locals.currentUser._id;
-    const books = await Book.find({});
-    if (!books){
+    // retrieve a sample of random books from the DB
+    const randBookSample = await Book.aggregate([{ $match: { $expr: { $gte: [ { $rand: {} }, 0.5 ] } } }, { $sample: { size: 35 } }]);
+
+    if (!randBookSample){
         req.flash('error','Cannot find that book!');
         return res.redirect('/entries');
     }
-    // pick n random books from all books in DB
-    let randCollection = _.sample(books,25);
-    // console.log(randCollection)
-
-    res.render('books/explore', {randCollection});
+  
+    // get rid of all duplicates from random sample
+    const uniqueBooks = [...new Map(randBookSample.map((b)=> [b.title, b])).values()];
+   
+    res.render('books/explore', {uniqueBooks});
 }
 
 

@@ -44,10 +44,9 @@
             <tr>
             <th scope="col">Cover</th>
             <th scope="col">Title</th>
-            <!-- <th scope="col">Subtitle</th> -->
             <th scope="col">Author</th>
-            <th scope="col">Genre</th>
-            <th scope="col">Page Count</th>
+            <th class="d-none d-sm-table-cell" scope="col">Genre</th>
+            <th class="d-none d-md-table-cell" scope="col">Page Count</th>
             </tr>
         </thead>
         <tbody>
@@ -57,9 +56,9 @@
                     <th scope="row"><img src="<%=e.book.coverUrl%>" class="img-fluid  shelfView mx-1" alt="cover"></th>
                     <td><a href="/entries/<%=e._id%>"><%= e.book.title %></a> <br> <%= e.book.subtitle %></td>
                     <td><%= e.book.author %></td>
-                    <td><a href="/entries?shelf=<%=shelf%>&genre=<%=encodeURIComponent(e.book.genre)%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></td>
+                    <td class="d-none d-sm-table-cell"><a href="/entries?shelf=<%=shelf%>&genre=<%=encodeURIComponent(e.book.genre)%>"><span class="badge bg-secondary" id="category"><%=e.book.genre%></span></a></td>
                     <% let pages = (e.book.pageCount == null)? 'n/a':e.book.pageCount %>
-                    <td> <%=pages%></td>
+                    <td class="d-none d-md-table-cell"> <%=pages%></td>
                 </tr>
             <% } %>
         </tbody>

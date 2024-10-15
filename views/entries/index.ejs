@@ -42,7 +42,7 @@
     
     <div class="container mx-3 px-0 mt-2">
         <div class="row">
-            <div class="col-xs-12 col-md-4 px-0">
+            <div class="col-xs-12 col-md-4 px-0 shelf">
                 <h3><a class="shelfTitle" href="/entries?shelf=read">Read</a> (<%= shelfSortedEntries.read.length %>)</h3>
                 <% for (let e of shelfSortedEntries.read) { %>
                     <div class="d-flex my-1">
@@ -51,7 +51,7 @@
                     </div>
                 <% } %>
             </div>
-            <div class="col-xs-12 col-md-4 px-0">
+            <div class="col-xs-12 col-md-4 px-0 shelf">
                 <h3><a class="shelfTitle" href="entries?shelf=reading">Reading </a>  (<%= shelfSortedEntries.reading.length %>)</h3>
                 <% for (let e of shelfSortedEntries.reading) { %>
                     <div class="d-flex my-1">
@@ -60,7 +60,7 @@
                     </div>
                 <% } %>
             </div>
-            <div class="col-xs-12 col-md-4 px-0">
+            <div class="col-xs-12 col-md-4 px-0 shelf">
                 <h3><a class="shelfTitle" href="entries?shelf=wanttoread">Want to Read</a> (<%= shelfSortedEntries.wanttoread.length %>)</h3>
                 <% for (let e of shelfSortedEntries.wanttoread) { %>
                     <div class="d-flex my-1">

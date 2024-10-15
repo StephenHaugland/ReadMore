@@ -22,7 +22,7 @@
     </div>
 
     <div class="container px-0">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5">
                 <% for (let b of results) { %>
                     <div class="card mb-2">
                         <div class="row g-0">
@@ -62,8 +62,8 @@
                               <p class="card-text text-center mt-0 mb-1"><small class="text-muted">by <%= b.volumeInfo.authors %></small></p>
                               <% let shortDescription = '' %>
                               <%try {if (b.volumeInfo.description.length>200) {shortDescription =b.volumeInfo.description.substring(0,200)+"..."} else {shortDescription = b.volumeInfo.description} } catch(e) { shortDescription ="No description available"}%>
-                              <p class="card-text mx-2"><span style="display:inline-block; width: 20px;"></span><%= shortDescription %></p>
-                              <p class="card-text mx-2 text-center"> Page Count: <%= b.volumeInfo.pageCount %></p>
+                              <p class="card-text mx-2 d-none d-sm-block"><span style="display:inline-block; width: 20px;"></span><%= shortDescription %></p>
+                              <p class="card-text mx-2 text-center"> <small>Page Count: <%= b.volumeInfo.pageCount %> </small></p>
                             </div>
                           </div>
                         </div>

@@ -14,11 +14,21 @@ module.exports.renderSearch = (req,res)=>{
 module.exports.search = async(req,res)=>{
     req.session.returnTo = req.originalUrl
 
-    const results = await searchByTerm(req.body.q);
-    if (!results){
+    const apiResults = await searchByTerm(req.body.q);
+    if (!apiResults){
         req.flash('error','Cannot find that book!');
         return res.redirect('/entries');
     }
+    // make sure thumbnail is set properly
+    const results = apiResults.map((b)=> {
+        try {
+            b.thumbnail = b.volumeInfo.imageLinks.smallThumbnail;
+        } catch (e) {
+            b.thumbnail = "/images/genericbookcover.jpg";
+        }
+        return b;
+    })
+
     populate = true;
     res.render('search', {results, populate});
 

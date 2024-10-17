@@ -1,0 +1,7 @@
+#featurePreview {
+    max-width: inherit;
+    max-height: inherit;
+    height: inherit;
+    width: inherit;
+    object-fit: cover;
+  }

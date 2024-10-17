@@ -30,15 +30,13 @@
                             <div class="container">
                                 <div class="row justify-content-center">
                                     <div class="my-2" id="thumbnail">
-                                        <% let thumbnail="" %>
-                                        <% try {thumbnail = b.volumeInfo.imageLinks.smallThumbnail} catch(e) {thumbnail="/images/genericbookcover.jpg"}%>
-                                        <img src="<%= thumbnail%>" class="img-fluid rounded" alt="book cover">
+                                        <img src="<%= b.thumbnail%>" class="img-fluid rounded" alt="book cover">
                                     </div>
                                     <div class="container">
                                         <form action="/books" method="POST" novalidate class="validated-form">
                                             <input type = "hidden" name = "book[title]" value ="<%= b.volumeInfo.title %>" />
                                             <input type = "hidden" name = "book[subtitle]" value ="<%= b.volumeInfo.subtitle %>" />
-                                            <input type = "hidden" name = "book[coverUrl]" value ="<%= thumbnail %>" />
+                                            <input type = "hidden" name = "book[coverUrl]" value ="<%= b.thumbnail %>" />
                                             <input type = "hidden" name = "book[author]" value ="<%= b.volumeInfo.authors %>" />
                                             <input type = "hidden" name = "book[genre]" value ="<%= (b.volumeInfo.categories)?b.volumeInfo.categories: "n/a" %>" /> 
                                             <input type = "hidden" name = "book[description]" value ="<%= b.volumeInfo.description %>" /> 
@@ -67,8 +65,9 @@
 
                               <p class="card-text mx-2 d-none d-sm-block"><span style="display:inline-block; width: 20px;"></span><%= shortDescription %></p>
                               <p class="card-text mx-2 d-block d-sm-none"><span style="display:inline-block; width: 20px;"></span><%= shorterDescription %></p>
-
+                                <% if (typeof b.volumeInfo.pageCount != 'undefined') {%>
                               <p class="card-text mx-2 text-center d-none d-sm-block"> <small>Page Count: <%= b.volumeInfo.pageCount %> </small></p>
+                                <% } %>
                             </div>
                           </div>
                         </div>

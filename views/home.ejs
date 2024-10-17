@@ -1,35 +1,43 @@
 <% layout('layouts/boilerplate')%>
-<div class="container d-flex justify-content-center align-items-center">
-    <div>
-        
-        <div class="text-center row align-items-center my-2">
-            <div class="col-6 ">
-                <h2 class="m-auto col-8">Welcome to Your Ultimate Book Catalog</h2>
-            </div>
-            <div class="col-6">
+<div class="container">
 
-                
-                <p class="col-8 m-auto py-4"> Discover a world of books at your fingertips! Our platform is designed to help you effortlessly catalog your 
+        <div class="row">
+            <div class="col my-3">
+                <h1 class="text-center">Welcome to Your Ultimate Book Catalog</h1>
+                <p class="text-center col-sm-12 col-md-8 mx-auto"> Discover a world of books at your fingertips! Our platform is designed to help you effortlessly catalog your 
                     reading journey. Whether you're an avid reader or just starting out, you can easily search for books and organize
                      them into personalized shelves.
                 </p>
-                                    
-            </div>
-        </div>
-        
-        <div class="row align-items-center my-2">
-            <div class="col-xs-6 col-md-6 col-lg-6">
-                <p class="col-8 m-auto text-center">
+                <p class="text-center col-sm-12 col-md-8 mx-auto">
                     Not only can you keep track of your literary adventures, but you can also jot down notes or summaries for each title,
                      ensuring that the insights and lessons you gain are never forgotten. Dive into your reading experience,
                       connect with like-minded book lovers, and make your reading journey truly memorable. Start building your bookshelf today!
                 </p>
+                <div class="text-center">
+                    <a class="btn btn-lg btn-primary" href="/register" role="button">Get Started</a>
+                </div>
             </div>
+        </div>
 
-            <div class="col-6 py-4">
-                <div class="card shadow col-xs-6 col-md-6 col-lg-8 mx-auto">
-                        <div class="card-body py-2">
-                            <h5 class="card-title">Register</h5>
+        <div class="row">
+            <div class="col-md text-center">
+                <h3>Search for Books</h3>
+                <img src="/images/search.png" alt="search" id="featurePreview">
+            </div>
+            <div class="col-md text-center">
+                <h3>Organize Your Shelves</h3>
+                <img src="/images/library.png" alt="shelves" id="featurePreview">
+            </div>
+            <div class="col-md text-center">
+                <h3>Take Notes and Summaries</h3>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col" id="registerForm">
+                <div class="card shadow ">
+                        <div class="card-body py-1">
+                            <h5 class="card-title text-center">Register</h5>
                             <form action="/register" method="POST" class="validated-form" novalidate>
                                 <div>
                                     <label class="form-label" for="username">Username</label>
@@ -52,17 +60,16 @@
                                         Looks good!
                                     </div>
                                 </div>
-                                <button class="btn btn-success btn-block my-1">Register</button>
+                                <div class="text-center">
+                                    <button class="btn btn-success btn-block my-1">Register</button>
+                                    <p><small>Already have an account? Sign in <a href="/login">here</a></small></p>
+                                </div>
                             </form>
                         </div>
-                        <div class="col text-center">
-                            <p><small>Already have an account? Sign in <a href="/login">here</a></small></p>
-                            <!-- <a class="btn btn-success" href="/login">Login</a> -->
-                        </div>
+                        
                     </div>
             </div>  
 
         </div>
         
-    </div>
 </div>

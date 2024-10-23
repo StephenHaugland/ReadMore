@@ -28,10 +28,10 @@ module.exports.bookSchema = Joi.object({
     book: Joi.object({
         title: Joi.string().required().escapeHTML(),
         author: Joi.string().required().escapeHTML(),
-        subtitle: Joi.string().escapeHTML().allow(''),
+        subtitle: Joi.string().allow(''),
         coverUrl: Joi.string(),
         genre: Joi.string().required(),
-        description: Joi.string().escapeHTML().allow(''),
+        description: Joi.string().allow(''),
         pageCount: Joi.number().min(0).allow('')
     }).required()
 })
@@ -40,6 +40,6 @@ module.exports.entrySchema = Joi.object({
     entry: Joi.object({
         book: Joi.string().hex().length(24).escapeHTML(),
         shelf:Joi.string().required().escapeHTML(),
-        notes: Joi.string().allow('').escapeHTML(),
+        quillNotes: Joi.string().allow('')
     }).required()
 })

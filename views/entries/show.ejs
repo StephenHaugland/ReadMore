@@ -2,7 +2,6 @@
 <div class="container">
   <a class="shelfTitle"href="/entries">Back to Library</a>
 
-
   <div class="row">
     <div class="col-sm-2">
       <div class="card mb-3 mx-auto" style="max-width: 200px;">
@@ -29,16 +28,16 @@
         </div>
       </div>
       <div>
-        <form action="/entries/<%=entry._id%>?_method=PUT" method="POST" novalidate class="validated-form">
+        <form action="/entries/<%=entry._id%>?_method=PUT" method="POST" id="notesForm" novalidate class="validated-form">
           <input type = "hidden" name = "entry[book]" value ="<%= entry.book._id %>" />
           <input type="hidden" name="entry[shelf]" value="<%=entry.shelf%>" />
 
-          <div class="">
-            <label for="notes" class="form-label mt-2 mb-0">Notes</label>
-            <textarea class="form-control" id="notes" name="entry[notes]" rows="<%=Math.max(entry.notes.length/70,4) %>"><%= entry.notes %></textarea>
+          
+          <div id="editor">
           </div>
+
           <div class="mb-3">
-            <button class="btn btn-sm btn-success">Save Notes</button>
+            <button class="btn btn-sm btn-success" id="saveNotesButton">Save Notes</button>
           </div>
         </form>
       </div>
@@ -48,7 +47,9 @@
       <h5>Current Shelf</h5>
       <form action="/entries/<%=entry._id%>?_method=PUT" method="POST" novalidate class="validated-form">
         <input type = "hidden" name = "entry[book]" value ="<%= entry.book._id %>" />
-        <input type="hidden" name="entry[notes]" value="<%=entry.notes%>" />
+        <input type="hidden" name="entry[quillNotes]" value="<%=entry.quillNotes%>" />
+
+        
 
         <div class="mb-3">
           <div class="form-check">
@@ -74,3 +75,36 @@
 
   </div>
 </div>
+
+<script>
+
+  const quill = new Quill('#editor', {
+  modules: {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ['bold', 'italic'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['blockquote','link']
+      ],
+    },
+    theme: 'snow',
+  });
+
+ 
+
+  const form = document.querySelector('#notesForm');
+
+  form.addEventListener('formdata', (event) => {
+    // Append Quill content before submitting
+    const quillNotes = JSON.stringify((quill.getContents()));
+    event.formData.append('entry[quillNotes]', (quillNotes));
+  });
+  // const Delta = Quill.import('delta');
+  const notes = <%-entry.quillNotes%>;
+  console.log(notes)
+  
+  // set contents with notes from DB
+  quill.setContents(notes)
+
+
+</script>

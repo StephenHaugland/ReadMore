@@ -4,7 +4,6 @@ const {capitalizeString} = require('../utils/capitalizeString.js');
 
 
 
-
 module.exports.index = async (req,res)=>{
     let filter = "";
     const userID = res.locals.currentUser._id;
@@ -99,6 +98,7 @@ module.exports.getEntryByBook = async (bID) => {
 module.exports.updateEntry = async(req,res)=>{
     const {id} = req.params;
     const {entry} = req.body;
+    // console.log(req.body);
     // await updateEntry(entry,id);
     const updatedEntry = await Entry.findByIdAndUpdate(id,{...entry});
     await updatedEntry.save();
@@ -114,7 +114,11 @@ module.exports.renderEdit = async(req,res)=>{
 }
 
 module.exports.showEntry = async(req,res)=>{
+
     const entry = await this.getEntry(req.params.id);
+    // console.log(typeof(entry.quillNotes))
+    // console.log(entry.quillNotes);
+    
     res.render('entries/show', {entry})
 }
 // module.exports.updateEntry = async (entry, eID) => {

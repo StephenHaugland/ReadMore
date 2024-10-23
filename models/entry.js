@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const User = require('./user')
+const User = require('./user');
+const { any } = require('joi');
 
 
 
@@ -14,7 +15,9 @@ const EntrySchema = new Schema({
         enum: ['Read','Want to Read','Reading'],
         required:true
     },
-    notes: String    
+    quillNotes: {
+        type: String
+    }
 });
 
 // EntrySchema.pre('findOneAndDelete', async function(doc) {

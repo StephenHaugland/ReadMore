@@ -93,15 +93,15 @@
  
 
   const form = document.querySelector('#notesForm');
-
   form.addEventListener('formdata', (event) => {
     // Append Quill content before submitting
     const quillNotes = JSON.stringify((quill.getContents()));
+    // console.log(quillNotes);
     event.formData.append('entry[quillNotes]', (quillNotes));
   });
   // const Delta = Quill.import('delta');
   const notes = <%-entry.quillNotes%>;
-  console.log(notes)
+  // console.log(notes)
   
   // set contents with notes from DB
   quill.setContents(notes)

@@ -10,11 +10,11 @@ span a {
     color:white;
 }
 
-span a:hover {
+#category a:hover {
     color:white;
 }
 
-span:hover {
+#category:hover {
         background-color: #474c52!important;
 }
 
@@ -45,5 +45,9 @@ p.link { cursor: pointer !important; }
 
 div.shelf {
     max-width: 90%;
+}
+
+#editor {
+    font-size: 1.1rem; 
 }
 

@@ -36,6 +36,8 @@ module.exports.search = async(req,res)=>{
 
 module.exports.renderExplore = async (req,res)=>{
     // retrieve a sample of random books from the DB
+    req.session.returnTo = req.originalUrl;
+
     const randBookSample = await Book.aggregate([{ $match: { $expr: { $gte: [ { $rand: {} }, 0.5 ] } } }, { $sample: { size: 35 } }]);
 
     if (!randBookSample){

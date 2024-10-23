@@ -1,6 +1,7 @@
 const Entry = require('../models/entry');
 const {addEntry, getAllEntries, removeEntry, getFilteredEntries} = require('../controllers/users');
 const {capitalizeString} = require('../utils/capitalizeString.js');
+const {notesTemplate} = require('../public/javascripts/notesTemplate.js');
 
 
 
@@ -56,6 +57,7 @@ module.exports.renderNewForm = (req,res) => {
 module.exports.createEntry = async(req,res)=>{
     // create new entry using data supplied from form
     const {entry} = req.body;
+    entry.quillNotes = JSON.stringify(notesTemplate);
     // const newEntry = await createNewEntry(entry);
     const newEntry = new Entry(entry);
     await newEntry.save();    
@@ -77,6 +79,7 @@ module.exports.createEntry = async(req,res)=>{
 
 module.exports.createNewEntry = async (entry) =>  {
     // create new entry
+    
     const newEntry = new Entry(entry);
     await newEntry.save();    
     return newEntry;

@@ -100,7 +100,7 @@ const styleSrcUrls = [
 const connectSrcUrls = [
     
 ];
-const fontSrcUrls = [];
+const fontSrcUrls = ["https://cdn.jsdelivr.net"];
 app.use(
     helmet.contentSecurityPolicy({
         directives: {

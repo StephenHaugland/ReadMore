@@ -1,77 +1,173 @@
-<% layout('layouts/boilerplate')%>
-<div class="container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadMore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
 
-        <div class="row">
-            <div class="col my-3">
-                <h1 class="text-center">Welcome to Your Ultimate Book Catalog</h1>
-                <p class="text-center col-sm-12 col-md-8 mx-auto"> Discover a world of books at your fingertips! Our platform is designed to help you effortlessly catalog your 
-                    reading journey. Whether you're an avid reader or just starting out, you can easily search for books and organize
-                     them into personalized shelves.
-                </p>
-                <p class="text-center col-sm-12 col-md-8 mx-auto">
-                    Not only can you keep track of your literary adventures, but you can also jot down notes or summaries for each title,
-                     ensuring that the insights and lessons you gain are never forgotten. Dive into your reading experience,
-                      connect with like-minded book lovers, and make your reading journey truly memorable. Start building your bookshelf today!
-                </p>
-                <div class="text-center">
-                    <a class="btn btn-lg btn-primary" href="/register" role="button">Get Started</a>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+
+
+
+    <link rel="stylesheet" href="/stylesheets/search.css">
+    <link rel="stylesheet" href="/stylesheets/forms.css">
+    <link rel="stylesheet" href="/stylesheets/entries.css">
+    <link rel="stylesheet" href="/stylesheets/explore.css">
+    <link rel="stylesheet" href="/stylesheets/body.css">
+    <link rel="stylesheet" href="/stylesheets/home.css">
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/images/site.webmanifest">
+
+
+</head>
+<body class="d-flex flex-column vh-100">
+    <script>0</script>
+    <%- include('partials/navbar')%>
+
+    <div class="">
+        <div class="background">
+            <h1 class="hero">Welcome to Your Ultimate Book Catalog</h1>
+            
+            
+            <div class="text-center">
+                <a class="btn btn-lg btn-dark" href="/register" role="button">Get Started</a>
+            </div>
+        </div>
+    </div>
+
+    <main class="container mt-3 gx-0 mx-auto px-2">
+       <%- include('partials/flash')%>
+
+
+        <div class="container mt-3">
+
+                <div class="row my-3 justify-content-center align-items-center">
+                    <div class="col-10 col-md-8">
+                        <h3 class="text-center mx-auto">Our platform is designed to help you effortlessly track and document your 
+                            literary adventures
+                        </h3>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="row bg-secondary text-dark">
-            <div class="col-md text-center my-3">
-                <h3>Search for Books</h3>
-                <img src="/images/search.png" alt="search" id="featurePreview">
-            </div>
-            <div class="col-md text-center my-3">
-                <h3>Organize Your Shelves</h3>
-                <img src="/images/library.png" alt="shelves" id="featurePreview">
-            </div>
-            <div class="col-md text-center my-3">
-                <h3>Take Notes and Summaries</h3>
-                <img src="/images/notes.png" alt="shelves" id="featurePreview">
+                <hr>
+                        
+                <div class="row text-dark">
+                    <div class="col-md text-center">
+                        <div class="dot mx-auto my-2">
+                        <i class="bi bi-search icon"></i>
+                        </div> 
+                        <h4>Search for Books</h4>
+                        <p>Browse through millions of titles and add books to your library</p>
+                    </div>
+                    <div class="col-md text-center">
+                        <div class="dot mx-auto my-2">
+                            <img src="/images/bookshelflarge.png" class="iconImage" alt="bookshelf">
+                        </div> 
+                        <h4>Organize Your Shelves</h4>
+                        <p>Sort your books into personalized shelves to catalog your reading journey</p>
+                    </div>
+                    <div class="col-md text-center">
+                        <div class="dot mx-auto my-2">
+                            <i class="bi bi-pencil-fill icon"></i>
+                        </div> 
+                        <h4>Take Notes</h4>
+                        <p>Jot down notes or summaries for each title, ensuring that the insights you gain are never forgotten</p>
+                    </div>
+                </div>
 
-            </div>
-        </div>
-        
-        <div class="row justify-content-center">
-            <div class="col my-3" id="registerForm">
-                <div class="card shadow ">
-                        <div class="card-body py-1">
-                            <h5 class="card-title text-center">Register</h5>
-                            <form action="/register" method="POST" class="validated-form" novalidate>
-                                <div>
-                                    <label class="form-label" for="username">Username</label>
-                                    <input class="form-control" type="text" id="username" name="username" required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="form-label" for="email">Email</label>
-                                    <input class="form-control" type="email" id="email" name="email" required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="form-label" for="password">Password</label>
-                                    <input class="form-control" type="password" id="password" name="password" required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    <button class="btn btn-success btn-block my-1">Register</button>
-                                    <p><small>Already have an account? Sign in <a href="/login">here</a></small></p>
-                                </div>
-                            </form>
+                <hr>
+
+                <div class="container">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-10 mb-2 ">
+                            <h3 class=" mx-auto text-center ">Discover a world of books at your fingertips</h3>
+                        </div>
+                        <div class="col-sm-10 col-md-6">
+                            <blockquote class="minimal-quote">
+                                "But in reading great literature I become a thousand men and yet remain myself. Like the night sky in the Greek poem, I see with a myriad eyes, but it is still I who see."
+                                <footer>- C.S. Lewis</footer>
+                            </blockquote>
+                        </div>
+                        <div class="col-sm-10 col-md-6">
+                            <blockquote class="minimal-quote">
+                                "A person who won't read has no advantage over one who can't read."
+                                <footer>- Mark Twain</footer>
+                            </blockquote>
                         </div>
                         
+                        
                     </div>
-            </div>  
+                </div>
 
+                <hr>
+                
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-6 my-auto">
+                        <div class="text-center">
+                            <h3>Build Your Library Today</h3>
+                            <p class="col-8 mx-auto">Whether you're an avid reader or just starting out, ReadMore can help you easily document your reading progress and reinforce
+                                what you've learned along the way. Dive into your reading experience, connect with like-minded book lovers, and make your reading journey truly memorable.
+                            </p>
+                            
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 my-3" id="registerForm">
+                        <div class="card shadow ">
+                                <div class="card-body py-1">
+                                    <h4 class="card-title text-center">Register</h4>
+                                    <form action="/register" method="POST" class="validated-form" novalidate>
+                                        <div>
+                                            <label class="form-label" for="username">Username</label>
+                                            <input class="form-control" type="text" id="username" name="username" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="email">Email</label>
+                                            <input class="form-control" type="email" id="email" name="email" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="password">Password</label>
+                                            <input class="form-control" type="password" id="password" name="password" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                        </div>
+                                        <div class="text-center">
+                                            <button class="btn btn-success btn-block my-1">Register</button>
+                                            <p><small>Already have an account? Sign in <a href="/login">here</a></small></p>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                            </div>
+                    </div>  
+
+                </div>
+                
         </div>
-        
-</div>
+    </main>
+
+    <%- include('partials/footer')%>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+    <!-- <script src="/javascripts/quillNotes.js"></script> -->
+
+    <script src="/javascripts/validateForms.js"></script>
+    <script src="/javascripts/submitOnClick.js"></script>
+
+</body>
+</html>
+

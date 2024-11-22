@@ -10,6 +10,11 @@ span a {
     color:white;
 }
 
+#category {
+    
+
+}
+
 #category a:hover {
     color:white;
 }
@@ -49,5 +54,9 @@ div.shelf {
 
 #editor {
     font-size: 1.1rem; 
+    background-color: white;
 }
 
+.ql-toolbar {
+    background-color: white;
+}
